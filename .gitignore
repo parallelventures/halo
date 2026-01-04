@@ -1,0 +1,74 @@
+# Xcode
+*.xcodeproj/*
+!*.xcodeproj/project.pbxproj
+!*.xcodeproj/xcshareddata/
+*.xcuserstate
+*.xcuserdatad/
+*.xccheckout
+*.moved-aside
+*.mode1v3
+*.mode2v3
+*.pbxuser
+!default.pbxuser
+*.perspectivev3
+!default.perspectivev3
+DerivedData/
+*.xcuserdata/
+
+# Build products
+build/
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# CocoaPods
+Pods/
+Podfile.lock
+
+# Swift Package Manager
+.swiftpm/
+.build/
+Package.resolved
+
+# Carthage
+Carthage/Build/
+
+# Fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/**/*.png
+fastlane/test_output
+
+# Code Signing
+*.mobileprovision
+*.p12
+
+# IDE
+.idea/
+*.swp
+*~
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Secrets (IMPORTANT!)
+*.xcconfig
+secrets/
+.env
+.env.*
+Secrets.swift
+APIKeys.swift
+
+# Tuist
+Tuist/Dependencies/
+Tuist/ProjectDescriptionHelpers/
+
+# Testing
+*.coverage
+*.profraw
+
+# Archives
+*.xcarchive

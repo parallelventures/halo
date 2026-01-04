@@ -1,0 +1,618 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 70;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		00000001 /* HaloApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000002 /* HaloApp.swift */; };
+		00000003 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000004 /* ContentView.swift */; };
+		00000005 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 00000006 /* Assets.xcassets */; };
+		00000007 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 00000008 /* Preview Assets.xcassets */; };
+		A183E7302F058271009023E4 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A183E7122F058271009023E4 /* RootView.swift */; };
+		A183E7312F058271009023E4 /* CameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A183E7232F058271009023E4 /* CameraView.swift */; };
+		A183E7322F058271009023E4 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A183E71D2F058271009023E4 /* NetworkService.swift */; };
+		A183E7332F058271009023E4 /* Components.swift in Sources */ = {isa = PBXBuildFile; fileRef = A183E7172F058271009023E4 /* Components.swift */; };
+		A183E7342F058271009023E4 /* PaywallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A183E7292F058271009023E4 /* PaywallView.swift */; };
+		A183E7352F058271009023E4 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A183E7252F058271009023E4 /* HomeView.swift */; };
+		A183E7362F058271009023E4 /* GeminiAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = A183E71C2F058271009023E4 /* GeminiAPI.swift */; };
+		A183E7372F058271009023E4 /* Animations.swift in Sources */ = {isa = PBXBuildFile; fileRef = A183E7162F058271009023E4 /* Animations.swift */; };
+		A183E7382F058271009023E4 /* SubscriptionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A183E71F2F058271009023E4 /* SubscriptionManager.swift */; };
+		A183E7392F058271009023E4 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A183E7272F058271009023E4 /* OnboardingView.swift */; };
+		A183E73A2F058271009023E4 /* CameraService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A183E7222F058271009023E4 /* CameraService.swift */; };
+		A183E73B2F058271009023E4 /* APIConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A183E7142F058271009023E4 /* APIConfig.swift */; };
+		A183E73C2F058271009023E4 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A183E71A2F058271009023E4 /* Extensions.swift */; };
+		A183E73D2F058271009023E4 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A183E7112F058271009023E4 /* AppState.swift */; };
+		A183E73E2F058271009023E4 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = A183E7182F058271009023E4 /* Theme.swift */; };
+		A183E73F2F058271009023E4 /* ResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A183E72D2F058271009023E4 /* ResultView.swift */; };
+		A183E7402F058271009023E4 /* ProcessingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A183E72B2F058271009023E4 /* ProcessingView.swift */; };
+		A19D36012F09B6350053724B /* SupabaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A19D36002F09B6350053724B /* SupabaseService.swift */; };
+		A19D36032F09B63B0053724B /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A19D36022F09B63B0053724B /* AuthService.swift */; };
+		A19D360C2F09BBEF0053724B /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = A19D360B2F09BBEF0053724B /* GoogleSignIn */; };
+		A19D360E2F09BBEF0053724B /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = A19D360D2F09BBEF0053724B /* GoogleSignInSwift */; };
+		A19D36122F0AAA560053724B /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = A19D36112F0AAA560053724B /* RevenueCat */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		00000002 /* HaloApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HaloApp.swift; sourceTree = "<group>"; };
+		00000004 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		00000006 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		00000008 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		00000009 /* Halo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Halo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A183E7112F058271009023E4 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		A183E7122F058271009023E4 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
+		A183E7142F058271009023E4 /* APIConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIConfig.swift; sourceTree = "<group>"; };
+		A183E7162F058271009023E4 /* Animations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Animations.swift; sourceTree = "<group>"; };
+		A183E7172F058271009023E4 /* Components.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Components.swift; sourceTree = "<group>"; };
+		A183E7182F058271009023E4 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		A183E71A2F058271009023E4 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		A183E71C2F058271009023E4 /* GeminiAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeminiAPI.swift; sourceTree = "<group>"; };
+		A183E71D2F058271009023E4 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
+		A183E71F2F058271009023E4 /* SubscriptionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionManager.swift; sourceTree = "<group>"; };
+		A183E7222F058271009023E4 /* CameraService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraService.swift; sourceTree = "<group>"; };
+		A183E7232F058271009023E4 /* CameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraView.swift; sourceTree = "<group>"; };
+		A183E7252F058271009023E4 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		A183E7272F058271009023E4 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		A183E7292F058271009023E4 /* PaywallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallView.swift; sourceTree = "<group>"; };
+		A183E72B2F058271009023E4 /* ProcessingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessingView.swift; sourceTree = "<group>"; };
+		A183E72D2F058271009023E4 /* ResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultView.swift; sourceTree = "<group>"; };
+		A19D36002F09B6350053724B /* SupabaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseService.swift; sourceTree = "<group>"; };
+		A19D36022F09B63B0053724B /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		A19D36072F09B66E0053724B /* Features */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Features; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		0000000A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A19D360C2F09BBEF0053724B /* GoogleSignIn in Frameworks */,
+				A19D360E2F09BBEF0053724B /* GoogleSignInSwift in Frameworks */,
+				A19D36122F0AAA560053724B /* RevenueCat in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0000000B = {
+			isa = PBXGroup;
+			children = (
+				0000000C /* Halo */,
+				A19D36102F0AAA560053724B /* Frameworks */,
+				0000000D /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		0000000C /* Halo */ = {
+			isa = PBXGroup;
+			children = (
+				00000002 /* HaloApp.swift */,
+				00000004 /* ContentView.swift */,
+				A183E7132F058271009023E4 /* App */,
+				A183E7212F058271009023E4 /* Core */,
+				A183E72F2F058271009023E4 /* Features */,
+				00000006 /* Assets.xcassets */,
+				0000000E /* Preview Content */,
+			);
+			path = Halo;
+			sourceTree = "<group>";
+		};
+		0000000D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				00000009 /* Halo.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		0000000E /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				00000008 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		A183E7132F058271009023E4 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				A183E7112F058271009023E4 /* AppState.swift */,
+				A183E7122F058271009023E4 /* RootView.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		A183E7152F058271009023E4 /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				A183E7142F058271009023E4 /* APIConfig.swift */,
+			);
+			path = Config;
+			sourceTree = "<group>";
+		};
+		A183E7192F058271009023E4 /* Design */ = {
+			isa = PBXGroup;
+			children = (
+				A183E7162F058271009023E4 /* Animations.swift */,
+				A183E7172F058271009023E4 /* Components.swift */,
+				A183E7182F058271009023E4 /* Theme.swift */,
+			);
+			path = Design;
+			sourceTree = "<group>";
+		};
+		A183E71B2F058271009023E4 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				A183E71A2F058271009023E4 /* Extensions.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		A183E71E2F058271009023E4 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				A183E71C2F058271009023E4 /* GeminiAPI.swift */,
+				A183E71D2F058271009023E4 /* NetworkService.swift */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
+		A183E7202F058271009023E4 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				A19D36002F09B6350053724B /* SupabaseService.swift */,
+				A19D36022F09B63B0053724B /* AuthService.swift */,
+				A183E71F2F058271009023E4 /* SubscriptionManager.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		A183E7212F058271009023E4 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				A183E7152F058271009023E4 /* Config */,
+				A183E7192F058271009023E4 /* Design */,
+				A183E71B2F058271009023E4 /* Extensions */,
+				A183E71E2F058271009023E4 /* Network */,
+				A183E7202F058271009023E4 /* Services */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		A183E7242F058271009023E4 /* Camera */ = {
+			isa = PBXGroup;
+			children = (
+				A183E7222F058271009023E4 /* CameraService.swift */,
+				A183E7232F058271009023E4 /* CameraView.swift */,
+			);
+			path = Camera;
+			sourceTree = "<group>";
+		};
+		A183E7262F058271009023E4 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				A183E7252F058271009023E4 /* HomeView.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		A183E7282F058271009023E4 /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				A183E7272F058271009023E4 /* OnboardingView.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		A183E72A2F058271009023E4 /* Paywall */ = {
+			isa = PBXGroup;
+			children = (
+				A183E7292F058271009023E4 /* PaywallView.swift */,
+			);
+			path = Paywall;
+			sourceTree = "<group>";
+		};
+		A183E72C2F058271009023E4 /* Processing */ = {
+			isa = PBXGroup;
+			children = (
+				A183E72B2F058271009023E4 /* ProcessingView.swift */,
+			);
+			path = Processing;
+			sourceTree = "<group>";
+		};
+		A183E72E2F058271009023E4 /* Result */ = {
+			isa = PBXGroup;
+			children = (
+				A183E72D2F058271009023E4 /* ResultView.swift */,
+			);
+			path = Result;
+			sourceTree = "<group>";
+		};
+		A183E72F2F058271009023E4 /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				A19D36072F09B66E0053724B /* Features */,
+				A183E7242F058271009023E4 /* Camera */,
+				A183E7262F058271009023E4 /* Home */,
+				A183E7282F058271009023E4 /* Onboarding */,
+				A183E72A2F058271009023E4 /* Paywall */,
+				A183E72C2F058271009023E4 /* Processing */,
+				A183E72E2F058271009023E4 /* Result */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		A19D36102F0AAA560053724B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		0000000F /* Halo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 00000010 /* Build configuration list for PBXNativeTarget "Halo" */;
+			buildPhases = (
+				00000011 /* Sources */,
+				0000000A /* Frameworks */,
+				00000012 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				A19D36072F09B66E0053724B /* Features */,
+			);
+			name = Halo;
+			productName = Halo;
+			productReference = 00000009 /* Halo.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		00000013 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					0000000F = {
+						CreatedOnToolsVersion = 15.0;
+					};
+				};
+			};
+			buildConfigurationList = 00000014 /* Build configuration list for PBXProject "Halo" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 0000000B;
+			packageReferences = (
+				A19D360A2F09BBEF0053724B /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
+				A19D360F2F0A97AA0053724B /* XCRemoteSwiftPackageReference "purchases-ios" */,
+			);
+			productRefGroup = 0000000D /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				0000000F /* Halo */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		00000012 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				00000007 /* Preview Assets.xcassets in Resources */,
+				00000005 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		00000011 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A183E7302F058271009023E4 /* RootView.swift in Sources */,
+				A183E7312F058271009023E4 /* CameraView.swift in Sources */,
+				A183E7322F058271009023E4 /* NetworkService.swift in Sources */,
+				A183E7332F058271009023E4 /* Components.swift in Sources */,
+				A183E7342F058271009023E4 /* PaywallView.swift in Sources */,
+				A183E7352F058271009023E4 /* HomeView.swift in Sources */,
+				A19D36032F09B63B0053724B /* AuthService.swift in Sources */,
+				A183E7362F058271009023E4 /* GeminiAPI.swift in Sources */,
+				A183E7372F058271009023E4 /* Animations.swift in Sources */,
+				A183E7382F058271009023E4 /* SubscriptionManager.swift in Sources */,
+				A19D36012F09B6350053724B /* SupabaseService.swift in Sources */,
+				A183E7392F058271009023E4 /* OnboardingView.swift in Sources */,
+				A183E73A2F058271009023E4 /* CameraService.swift in Sources */,
+				A183E73B2F058271009023E4 /* APIConfig.swift in Sources */,
+				A183E73C2F058271009023E4 /* Extensions.swift in Sources */,
+				A183E73D2F058271009023E4 /* AppState.swift in Sources */,
+				A183E73E2F058271009023E4 /* Theme.swift in Sources */,
+				A183E73F2F058271009023E4 /* ResultView.swift in Sources */,
+				A183E7402F058271009023E4 /* ProcessingView.swift in Sources */,
+				00000003 /* ContentView.swift in Sources */,
+				00000001 /* HaloApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		00000015 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		00000016 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		00000017 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"Halo/Preview Content\"";
+				DEVELOPMENT_TEAM = 3D2TMTBDFN;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Halo/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Halo;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Halo needs camera access to take your selfie for AI hairstyle try-on.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Halo needs photo library access to select photos for AI hairstyle try-on.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.halo.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		00000018 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"Halo/Preview Content\"";
+				DEVELOPMENT_TEAM = 3D2TMTBDFN;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Halo/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Halo;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Halo needs camera access to take your selfie for AI hairstyle try-on.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Halo needs photo library access to select photos for AI hairstyle try-on.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.halo.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		00000010 /* Build configuration list for PBXNativeTarget "Halo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				00000017 /* Debug */,
+				00000018 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		00000014 /* Build configuration list for PBXProject "Halo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				00000015 /* Debug */,
+				00000016 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		A19D360A2F09BBEF0053724B /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/google/GoogleSignIn-iOS";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 9.0.0;
+			};
+		};
+		A19D360F2F0A97AA0053724B /* XCRemoteSwiftPackageReference "purchases-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/RevenueCat/purchases-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.52.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		A19D360B2F09BBEF0053724B /* GoogleSignIn */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A19D360A2F09BBEF0053724B /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignIn;
+		};
+		A19D360D2F09BBEF0053724B /* GoogleSignInSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A19D360A2F09BBEF0053724B /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignInSwift;
+		};
+		A19D36112F0AAA560053724B /* RevenueCat */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A19D360F2F0A97AA0053724B /* XCRemoteSwiftPackageReference "purchases-ios" */;
+			productName = RevenueCat;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 00000013 /* Project object */;
+}
