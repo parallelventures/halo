@@ -33,6 +33,9 @@
 		A19D360C2F09BBEF0053724B /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = A19D360B2F09BBEF0053724B /* GoogleSignIn */; };
 		A19D360E2F09BBEF0053724B /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = A19D360D2F09BBEF0053724B /* GoogleSignInSwift */; };
 		A19D36122F0AAA560053724B /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = A19D36112F0AAA560053724B /* RevenueCat */; };
+		A19D36182F0AD9580053724B /* VariableBlur.swift in Sources */ = {isa = PBXBuildFile; fileRef = A19D36172F0AD9580053724B /* VariableBlur.swift */; };
+		A19D361C2F0B0C360053724B /* Agrandir Narrow Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = A19D36192F0B0C360053724B /* Agrandir Narrow Bold.otf */; };
+		A19D361F2F0B36040053724B /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A19D361D2F0B36040053724B /* HistoryView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -60,6 +63,10 @@
 		A183E72D2F058271009023E4 /* ResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultView.swift; sourceTree = "<group>"; };
 		A19D36002F09B6350053724B /* SupabaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseService.swift; sourceTree = "<group>"; };
 		A19D36022F09B63B0053724B /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
+		A19D36172F0AD9580053724B /* VariableBlur.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VariableBlur.swift; sourceTree = "<group>"; };
+		A19D36192F0B0C360053724B /* Agrandir Narrow Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Agrandir Narrow Bold.otf"; sourceTree = "<group>"; };
+		A19D361D2F0B36040053724B /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
+		A19D36202F0C108E0053724B /* Halo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Halo.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -92,6 +99,8 @@
 		0000000C /* Halo */ = {
 			isa = PBXGroup;
 			children = (
+				A19D36202F0C108E0053724B /* Halo.entitlements */,
+				A19D361B2F0B0C360053724B /* Resources */,
 				00000002 /* HaloApp.swift */,
 				00000004 /* ContentView.swift */,
 				A183E7132F058271009023E4 /* App */,
@@ -139,6 +148,7 @@
 		A183E7192F058271009023E4 /* Design */ = {
 			isa = PBXGroup;
 			children = (
+				A19D36172F0AD9580053724B /* VariableBlur.swift */,
 				A183E7162F058271009023E4 /* Animations.swift */,
 				A183E7172F058271009023E4 /* Components.swift */,
 				A183E7182F058271009023E4 /* Theme.swift */,
@@ -237,6 +247,7 @@
 		A183E72F2F058271009023E4 /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				A19D361E2F0B36040053724B /* History */,
 				A19D36072F09B66E0053724B /* Features */,
 				A183E7242F058271009023E4 /* Camera */,
 				A183E7262F058271009023E4 /* Home */,
@@ -253,6 +264,30 @@
 			children = (
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		A19D361A2F0B0C360053724B /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				A19D36192F0B0C360053724B /* Agrandir Narrow Bold.otf */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
+		A19D361B2F0B0C360053724B /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				A19D361A2F0B0C360053724B /* Fonts */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		A19D361E2F0B36040053724B /* History */ = {
+			isa = PBXGroup;
+			children = (
+				A19D361D2F0B36040053724B /* HistoryView.swift */,
+			);
+			path = History;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -321,6 +356,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				00000007 /* Preview Assets.xcassets in Resources */,
+				A19D361C2F0B0C360053724B /* Agrandir Narrow Bold.otf in Resources */,
 				00000005 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -332,11 +368,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A19D36182F0AD9580053724B /* VariableBlur.swift in Sources */,
 				A183E7302F058271009023E4 /* RootView.swift in Sources */,
 				A183E7312F058271009023E4 /* CameraView.swift in Sources */,
 				A183E7322F058271009023E4 /* NetworkService.swift in Sources */,
 				A183E7332F058271009023E4 /* Components.swift in Sources */,
 				A183E7342F058271009023E4 /* PaywallView.swift in Sources */,
+				A19D361F2F0B36040053724B /* HistoryView.swift in Sources */,
 				A183E7352F058271009023E4 /* HomeView.swift in Sources */,
 				A19D36032F09B63B0053724B /* AuthService.swift in Sources */,
 				A183E7362F058271009023E4 /* GeminiAPI.swift in Sources */,
@@ -483,8 +521,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Halo/Halo.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_ASSET_PATHS = "\"Halo/Preview Content\"";
 				DEVELOPMENT_TEAM = 3D2TMTBDFN;
 				ENABLE_PREVIEWS = YES;
@@ -504,7 +543,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.halo.app;
+				PRODUCT_BUNDLE_IDENTIFIER = com.parallelventures.halo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -521,8 +560,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Halo/Halo.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_ASSET_PATHS = "\"Halo/Preview Content\"";
 				DEVELOPMENT_TEAM = 3D2TMTBDFN;
 				ENABLE_PREVIEWS = YES;
@@ -542,7 +582,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.halo.app;
+				PRODUCT_BUNDLE_IDENTIFIER = com.parallelventures.halo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;

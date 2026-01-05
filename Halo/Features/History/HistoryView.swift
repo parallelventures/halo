@@ -10,6 +10,7 @@ import SwiftUI
 struct HistoryView: View {
     
     @EnvironmentObject private var appState: AppState
+    @Environment(\.dismiss) private var dismiss
     @StateObject private var storageService = SupabaseStorageService.shared
     
     @State private var selectedGeneration: HairstyleGeneration?
@@ -22,30 +23,62 @@ struct HistoryView: View {
     
     var body: some View {
         NavigationStack {
-            ZStack {
+            ZStack(alignment: .top) {
                 Color.black.ignoresSafeArea()
                 
-                if storageService.isLoading && storageService.generations.isEmpty {
-                    ProgressView()
-                        .tint(.white)
-                } else if storageService.generations.isEmpty {
-                    emptyState
-                } else {
-                    historyGrid
-                }
-            }
-            .navigationTitle("History")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    Button {
-                        appState.navigateTo(.home)
-                    } label: {
-                        Image(systemName: "xmark")
-                            .foregroundColor(.white)
+                // Main content with top padding for custom nav bar
+                VStack(spacing: 0) {
+                    Color.clear.frame(height: 60) // Spacer for nav bar
+                    
+                    if storageService.isLoading && storageService.generations.isEmpty {
+                        Spacer()
+                        ProgressView()
+                            .tint(.white)
+                        Spacer()
+                    } else if storageService.generations.isEmpty {
+                        Spacer()
+                        emptyState
+                        Spacer()
+                    } else {
+                        historyGrid
                     }
                 }
+                
+                // Custom Navigation Bar
+                HStack {
+                    // Close Button
+                    Button {
+                        appState.showHistorySheet = false
+                        dismiss()
+                    } label: {
+                        Image(systemName: "xmark")
+                            .font(.system(size: 16, weight: .semibold))
+                            .foregroundColor(.white.opacity(0.8))
+                            .frame(width: 40, height: 40)
+                            .background(Color.white.opacity(0.1), in: Circle())
+                    }
+                    
+                    Spacer()
+                    
+                    Text("History")
+                        .font(.system(size: 17, weight: .semibold))
+                        .foregroundColor(.white)
+                    
+                    Spacer()
+                    
+                    // Invisible spacer for balance
+                    Color.clear.frame(width: 40, height: 40)
+                }
+                .padding(.horizontal, 16)
+                .padding(.top, 10)
+                .frame(height: 60)
+                .background(
+                    Color.black.opacity(0.8)
+                        .ignoresSafeArea(edges: .top)
+                        .blur(radius: 20)
+                )
             }
+            .navigationBarHidden(true)
         }
         .task {
             await storageService.fetchHistory()
@@ -70,7 +103,7 @@ struct HistoryView: View {
                 .foregroundColor(.white.opacity(0.5))
             
             Button {
-                appState.navigateTo(.camera)
+                appState.showCameraSheet = true
             } label: {
                 Text("Try Your First Look")
                     .font(.system(size: 14, weight: .semibold))
@@ -204,29 +237,31 @@ struct HistoryDetailView: View {
                     
                     Spacer()
                     
-                    // Actions
-                    HStack(spacing: 16) {
+                    // Actions - Download & Share
+                    HStack(spacing: 12) {
+                        // Download Button - Clear Glass
+                        Button {
+                            downloadImage()
+                        } label: {
+                            Text("Download")
+                                .font(.system(size: 15, weight: .semibold))
+                                .foregroundColor(.white)
+                                .frame(maxWidth: .infinity)
+                                .frame(height: 50)
+                        }
+                        .glassButtonCapsule(style: .clear)
+                        
+                        // Share Button - White Glass
                         Button {
                             shareImage()
                         } label: {
-                            Label("Share", systemImage: "square.and.arrow.up")
-                                .font(.system(size: 14, weight: .medium))
-                                .foregroundColor(.white)
+                            Text("Share")
+                                .font(.system(size: 15, weight: .semibold))
+                                .foregroundColor(.black)
                                 .frame(maxWidth: .infinity)
-                                .frame(height: 44)
-                                .background(Color.white.opacity(0.1), in: RoundedRectangle(cornerRadius: 10))
+                                .frame(height: 50)
                         }
-                        
-                        Button {
-                            showDeleteConfirm = true
-                        } label: {
-                            Label("Delete", systemImage: "trash")
-                                .font(.system(size: 14, weight: .medium))
-                                .foregroundColor(.red)
-                                .frame(maxWidth: .infinity)
-                                .frame(height: 44)
-                                .background(Color.red.opacity(0.1), in: RoundedRectangle(cornerRadius: 10))
-                        }
+                        .glassButtonCapsule(style: .white)
                     }
                     .padding(.horizontal, 20)
                     .padding(.bottom, 20)
@@ -234,6 +269,18 @@ struct HistoryDetailView: View {
             }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
+                // Delete Button - Top Left
+                ToolbarItem(placement: .topBarLeading) {
+                    Button {
+                        showDeleteConfirm = true
+                    } label: {
+                        Image(systemName: "trash")
+                            .font(.system(size: 16, weight: .medium))
+                            .foregroundColor(.red.opacity(0.9))
+                    }
+                }
+                
+                // Done Button - Top Right
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Done") {
                         dismiss()
@@ -271,9 +318,58 @@ struct HistoryDetailView: View {
             }
         }
     }
+    
+    private func downloadImage() {
+        guard let url = generation.imageURL else { return }
+        
+        Task {
+            if let (data, _) = try? await URLSession.shared.data(from: url),
+               let image = UIImage(data: data) {
+                
+                await MainActor.run {
+                    UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
+                    HapticManager.success()
+                }
+            }
+        }
+    }
 }
 
 #Preview {
     HistoryView()
         .environmentObject(AppState())
+}
+
+// MARK: - Glass Button Capsule Extension
+enum GlassCapsuleStyle {
+    case clear
+    case white
+}
+
+extension View {
+    @ViewBuilder
+    func glassButtonCapsule(style: GlassCapsuleStyle) -> some View {
+        if #available(iOS 26.0, *) {
+            switch style {
+            case .clear:
+                self
+                    .background(.clear)
+                    .glassEffect(.regular, in: .capsule)
+            case .white:
+                self
+                    .background(Color.white)
+                    .clipShape(Capsule())
+                    .glassEffect(.regular, in: .capsule)
+            }
+        } else {
+            switch style {
+            case .clear:
+                self
+                    .background(.ultraThinMaterial, in: Capsule())
+            case .white:
+                self
+                    .background(Color.white, in: Capsule())
+            }
+        }
+    }
 }

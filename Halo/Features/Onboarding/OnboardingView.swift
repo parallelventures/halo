@@ -212,9 +212,11 @@ struct GoogleSignInButton: View {
             signInWithGoogle()
         } label: {
             HStack(spacing: 8) {
-                // Google "G" logo placeholder
-                Image(systemName: "g.circle.fill")
-                    .font(.system(size: 20))
+                // Google "G" logo
+                Image("google")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 20, height: 20)
                 Text("Continue with Google")
                     .font(.system(size: 17, weight: .medium))
             }

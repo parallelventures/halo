@@ -36,8 +36,9 @@ extension View {
 struct CameraView: View {
     
     @EnvironmentObject private var appState: AppState
+    @EnvironmentObject private var cameraService: CameraService
     
-    @StateObject private var cameraService = CameraService()
+    // @StateObject retiré car injecté depuis l'environnement
     @State private var showingPhotoPicker = false
     @State private var selectedPhotoItem: PhotosPickerItem?
     @State private var showStyleSheet = false
@@ -50,7 +51,6 @@ struct CameraView: View {
                     CameraPreviewView(session: cameraService.session)
                 } else {
                     Color.black
-                        .overlay(ProgressView().tint(.white))
                 }
             }
             .ignoresSafeArea()
@@ -64,7 +64,7 @@ struct CameraView: View {
                 HStack {
                     Button {
                         HapticManager.shared.buttonPress()
-                        appState.navigateTo(.home)
+                        appState.showCameraSheet = false
                     } label: {
                         Image(systemName: "xmark")
                             .font(.system(size: 16, weight: .medium))
@@ -72,6 +72,12 @@ struct CameraView: View {
                             .frame(width: 40, height: 40)
                             .glassCircle()
                     }
+                    
+                    Spacer()
+                    
+                    Text("Halo")
+                        .font(.halo.displaySmall)
+                        .foregroundColor(.white)
                     
                     Spacer()
                     
@@ -138,17 +144,21 @@ struct CameraView: View {
                             Task { await capturePhoto() }
                         } label: {
                             ZStack {
+                                // Background circle - Glass Effect
                                 Circle()
-                                    .strokeBorder(.white, lineWidth: 3)
-                                    .frame(width: 72, height: 72)
+                                    .fill(.clear)
+                                    .frame(width: 100, height: 100)
+                                    .glassCircle()
                                 
+                                // Inner white circle
                                 Circle()
                                     .fill(.white)
-                                    .frame(width: 58, height: 58)
-                                    .scaleEffect(cameraService.isCapturing ? 0.9 : 1)
-                                    .animation(.easeOut(duration: 0.1), value: cameraService.isCapturing)
+                                    .frame(width: 80, height: 80)
+                                    .scaleEffect(cameraService.isCapturing ? 0.85 : 1)
+                                    .animation(.spring(response: 0.2, dampingFraction: 0.6), value: cameraService.isCapturing)
                             }
                         }
+                        .buttonStyle(ScaleButtonStyle()) // Custom style for press effect
                         .disabled(cameraService.isCapturing || appState.selectedHairstyle == nil)
                         .opacity(appState.selectedHairstyle == nil ? 0.4 : 1)
                         
@@ -310,5 +320,15 @@ struct StylePickerSheet: View {
 #Preview {
     CameraView()
         .environmentObject(AppState())
+        .environmentObject(CameraService())
         .preferredColorScheme(.dark)
+}
+
+// MARK: - Scale Button Style
+struct ScaleButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .scaleEffect(configuration.isPressed ? 0.9 : 1)
+            .animation(.spring(response: 0.2, dampingFraction: 0.6), value: configuration.isPressed)
+    }
 }

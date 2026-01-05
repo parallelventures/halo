@@ -111,9 +111,9 @@ extension Font {
 
 struct HaloTypography {
     // Display - Bold for glass contrast
-    let displayLarge = Font.system(size: 40, weight: .bold, design: .default)
-    let displayMedium = Font.system(size: 32, weight: .bold, design: .default)
-    let displaySmall = Font.system(size: 28, weight: .semibold, design: .default)
+    let displayLarge = Font.custom("Agrandir-NarrowBold", size: 40)
+    let displayMedium = Font.custom("Agrandir-NarrowBold", size: 32)
+    let displaySmall = Font.custom("Agrandir-NarrowBold", size: 28)
     
     // Headlines
     let headlineLarge = Font.system(size: 24, weight: .semibold, design: .default)

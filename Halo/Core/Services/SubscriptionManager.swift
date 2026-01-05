@@ -15,8 +15,8 @@ enum EntitlementID {
 
 // MARK: - Product IDs
 enum ProductID {
-    static let monthlySubscription = "com.halo.subscription.monthly"
-    static let annualSubscription = "com.halo.subscription.annual"
+    static let monthlySubscription = "monthly"
+    static let annualSubscription = "annual"
 }
 
 // MARK: - RevenueCat Configuration
@@ -39,11 +39,11 @@ final class SubscriptionManager: NSObject, ObservableObject {
     
     // Current offering packages
     var monthlyPackage: Package? {
-        offerings?.current?.monthly
+        offerings?.current?.monthly ?? offerings?.current?.package(identifier: "monthly")
     }
     
     var annualPackage: Package? {
-        offerings?.current?.annual
+        offerings?.current?.annual ?? offerings?.current?.package(identifier: "annual")
     }
     
     var allPackages: [Package] {

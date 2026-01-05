@@ -146,11 +146,139 @@ final class AuthService: NSObject, ObservableObject {
         UserDefaults.standard.removeObject(forKey: "supabase_user_id")
         UserDefaults.standard.removeObject(forKey: "supabase_refresh_token")
         authState = .unauthenticated
+        Task {
+            await SubscriptionManager.shared.logout()
+        }
+    }
+    
+    // MARK: - Delete Account
+    func deleteAccount() async {
+        // En production, il faudrait appeler une Cloud Function pour supprimer l'utilisateur de Auth
+        // Ici on supprime les données locales et on déconnecte
+        signOut()
+        HapticManager.success()
     }
     
     // MARK: - Get Access Token
     func getAccessToken() -> String? {
         UserDefaults.standard.string(forKey: "supabase_access_token")
+    }
+    
+    // MARK: - Refresh Session
+    func refreshSession() async -> Bool {
+        guard let refreshToken = UserDefaults.standard.string(forKey: "supabase_refresh_token") else {
+            print("❌ No refresh token available")
+            return false
+        }
+        
+        let url = URL(string: "\(SupabaseConfig.projectURL)/auth/v1/token?grant_type=refresh_token")!
+        
+        let body: [String: Any] = [
+            "refresh_token": refreshToken
+        ]
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue(SupabaseConfig.anonKey, forHTTPHeaderField: "apikey")
+        request.httpBody = try? JSONSerialization.data(withJSONObject: body)
+        
+        do {
+            let (data, response) = try await session.data(for: request)
+            
+            guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+                print("❌ Token refresh failed")
+                // Token invalid, sign out
+                signOut()
+                return false
+            }
+            
+            if let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+               let accessToken = json["access_token"] as? String,
+               let user = json["user"] as? [String: Any],
+               let userId = user["id"] as? String {
+                
+                // Update tokens
+                UserDefaults.standard.set(accessToken, forKey: "supabase_access_token")
+                UserDefaults.standard.set(userId, forKey: "supabase_user_id")
+                
+                if let newRefreshToken = json["refresh_token"] as? String {
+                    UserDefaults.standard.set(newRefreshToken, forKey: "supabase_refresh_token")
+                }
+                
+                await MainActor.run {
+                    self.authState = .authenticated(userId: userId)
+                }
+                
+                print("✅ Session refreshed successfully")
+                return true
+            }
+        } catch {
+            print("❌ Refresh session error: \(error)")
+        }
+        
+        return false
+    }
+    
+    // MARK: - Sign in Anonymously
+    func signInAnonymously() async {
+        // If already authenticated, do nothing
+        if isAuthenticated { return }
+        
+        isLoading = true
+        
+        let url = URL(string: "\(SupabaseConfig.projectURL)/auth/v1/signup")!
+        
+        // Create random credentials for anonymous user
+        let email = "\(UUID().uuidString)@anonymous.halo.app"
+        let password = UUID().uuidString
+        
+        let body: [String: Any] = [
+            "email": email,
+            "password": password,
+            "data": ["is_anonymous": true]
+        ]
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue(SupabaseConfig.anonKey, forHTTPHeaderField: "apikey")
+        request.httpBody = try? JSONSerialization.data(withJSONObject: body)
+        
+        do {
+            let (data, response) = try await session.data(for: request)
+            
+            guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+                print("❌ Anonymous sign in failed")
+                isLoading = false
+                return
+            }
+            
+            // Parse response
+            if let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+               let accessToken = json["access_token"] as? String,
+               let user = json["user"] as? [String: Any],
+               let userId = user["id"] as? String {
+                
+                // Save session
+                UserDefaults.standard.set(accessToken, forKey: "supabase_access_token")
+                UserDefaults.standard.set(userId, forKey: "supabase_user_id")
+                
+                if let refreshToken = json["refresh_token"] as? String {
+                    UserDefaults.standard.set(refreshToken, forKey: "supabase_refresh_token")
+                }
+                
+                self.authState = .authenticated(userId: userId)
+                self.isLoading = false
+                print("✅ Signed in anonymously with ID: \(userId)")
+                
+                // Sync with RevenueCat
+                await SubscriptionManager.shared.login(userID: userId)
+            }
+        } catch {
+            print("❌ Anonymous sign in error: \(error)")
+            isLoading = false
+        }
     }
     
     // MARK: - Helpers

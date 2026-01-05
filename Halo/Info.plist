@@ -65,5 +65,11 @@
     <!-- Photo Library Permission -->
     <key>NSPhotoLibraryUsageDescription</key>
     <string>Halo needs photo library access to save your generated hairstyles</string>
+
+    <!-- Custom Fonts -->
+    <key>UIAppFonts</key>
+    <array>
+        <string>Agrandir Narrow Bold.otf</string>
+    </array>
 </dict>
 </plist>

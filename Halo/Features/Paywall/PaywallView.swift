@@ -2,7 +2,7 @@
 //  PaywallView.swift
 //  Halo
 //
-//  Premium paywall with RevenueCat integration
+//  Fullscreen paywall with native mini sheet for pricing
 //
 
 import SwiftUI
@@ -13,183 +13,231 @@ struct PaywallView: View {
     @EnvironmentObject private var appState: AppState
     @EnvironmentObject private var subscriptionManager: SubscriptionManager
     
-    @State private var selectedPlanIndex: Int = 1 // 0 = monthly, 1 = annual
-    @State private var isVisible = false
+    @State private var showPricingSheet = false
     
-    private var selectedPackage: Package? {
-        selectedPlanIndex == 1 ? subscriptionManager.annualPackage : subscriptionManager.monthlyPackage
-    }
+    private var isLargePhone: Bool { UIScreen.main.bounds.height >= 800 }
+    private var isSmallPhone: Bool { UIScreen.main.bounds.height < 700 }
+    
+    // Responsive dimensions
+    private var imageSize: CGFloat { isSmallPhone ? 140 : (isLargePhone ? 200 : 180) }
+    private var imageSizeLarge: CGFloat { isSmallPhone ? 160 : (isLargePhone ? 220 : 200) }
+    private var imageHeight: CGFloat { isSmallPhone ? 180 : (isLargePhone ? 270 : 240) }
+    private var imageHeightLarge: CGFloat { isSmallPhone ? 200 : (isLargePhone ? 290 : 270) }
+    private var stackHeight: CGFloat { isSmallPhone ? 220 : (isLargePhone ? 340 : 300) }
+    private var topSpacing: CGFloat { isSmallPhone ? 20 : (isLargePhone ? 60 : 40) }
+    private var sheetHeight: CGFloat { isSmallPhone ? 340 : 380 }
     
     var body: some View {
         ZStack {
             // Aurora background
             AnimatedDarkGradient()
+                .ignoresSafeArea()
             
-            ScrollView(showsIndicators: false) {
-                VStack(spacing: Spacing.lg) {
-                    // Close
-                    HStack {
-                        Spacer()
-                        HaloIconButton(icon: "xmark") {
-                            appState.navigateTo(.result)
-                        }
-                    }
-                    .padding(.top, Spacing.md)
+            // Main content
+            VStack(spacing: isSmallPhone ? 16 : 30) {
+                Spacer().frame(height: topSpacing)
+                
+                // Titles
+                VStack(spacing: 12) {
+                    Text("Unlock Halo Studio")
+                        .font(.halo.displayLarge)
+                        .foregroundColor(.white)
+                        .multilineTextAlignment(.center)
+                        .shadow(color: .black.opacity(0.2), radius: 10, y: 5)
                     
-                    // Header
-                    VStack(spacing: Spacing.md) {
-                        Circle()
-                            .fill(Color.theme.glassFill)
-                            .frame(width: 80, height: 80)
-                            .overlay(
-                                Circle()
-                                    .strokeBorder(LinearGradient.haloPrimary, lineWidth: 1)
-                            )
-                            .overlay(
-                                Image(systemName: "crown.fill")
-                                    .font(.system(size: 32))
-                                    .foregroundStyle(LinearGradient.haloPrimary)
-                            )
-                        
-                        Text("Unlock Halo Pro")
-                            .font(.halo.displayMedium)
-                            .foregroundColor(.theme.textPrimary)
-                        
-                        Text("See your amazing transformation\nand explore unlimited styles")
-                            .font(.halo.bodyMedium)
-                            .foregroundColor(.theme.textSecondary)
-                            .multilineTextAlignment(.center)
-                    }
-                    
-                    // Preview teaser
-                    if let image = appState.generatedImage {
-                        Image(uiImage: image)
-                            .resizable()
-                            .scaledToFill()
-                            .frame(height: 180)
-                            .frame(maxWidth: .infinity)
-                            .clipShape(RoundedRectangle(cornerRadius: CornerRadius.lg))
-                            .blur(radius: 20)
-                            .overlay(
-                                VStack(spacing: Spacing.sm) {
-                                    Image(systemName: "sparkles")
-                                        .font(.system(size: 28))
-                                        .foregroundStyle(LinearGradient.haloPrimary)
-                                    
-                                    Text("Your result is ready!")
-                                        .font(.halo.labelLarge)
-                                        .foregroundColor(.white)
-                                }
-                            )
-                            .overlay(
-                                RoundedRectangle(cornerRadius: CornerRadius.lg)
-                                    .strokeBorder(Color.theme.glassBorder, lineWidth: 1)
-                            )
-                    }
-                    
-                    // Pricing from RevenueCat
-                    if subscriptionManager.isLoading {
-                        ProgressView()
-                            .tint(.white)
-                            .padding()
-                    } else {
-                        VStack(spacing: Spacing.md) {
-                            // Annual Plan
-                            if let annual = subscriptionManager.annualPackage {
-                                RevenueCatPricingCard(
-                                    package: annual,
-                                    isPopular: true,
-                                    isSelected: selectedPlanIndex == 1
-                                ) {
-                                    withAnimation(.haloQuick) {
-                                        selectedPlanIndex = 1
-                                    }
-                                }
-                            }
-                            
-                            // Monthly Plan
-                            if let monthly = subscriptionManager.monthlyPackage {
-                                RevenueCatPricingCard(
-                                    package: monthly,
-                                    isPopular: false,
-                                    isSelected: selectedPlanIndex == 0
-                                ) {
-                                    withAnimation(.haloQuick) {
-                                        selectedPlanIndex = 0
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    
-                    // CTA
-                    VStack(spacing: Spacing.md) {
-                        HaloCTAButton(
-                            "Start \(selectedPlanIndex == 1 ? "Annual" : "Monthly") Plan",
-                            isLoading: subscriptionManager.isLoading
-                        ) {
-                            Task { await purchase() }
-                        }
-                        .disabled(selectedPackage == nil)
-                        
-                        if selectedPlanIndex == 1, let savings = subscriptionManager.annualPackage?.savingsPercentage {
-                            HStack(spacing: Spacing.xxs) {
-                                Image(systemName: "tag.fill")
-                                    .font(.caption)
-                                Text("Save \(savings)%")
-                                    .font(.halo.labelSmall)
-                            }
-                            .foregroundColor(.theme.success)
-                        }
-                    }
-                    
-                    // Footer
-                    VStack(spacing: Spacing.md) {
-                        Button("Restore Purchases") {
-                            Task {
-                                do {
-                                    try await subscriptionManager.restorePurchases()
-                                    if subscriptionManager.isSubscribed {
-                                        appState.navigateTo(.result)
-                                    }
-                                } catch {
-                                    // Error handled in manager
-                                }
-                            }
-                        }
-                        .font(.halo.labelMedium)
-                        .foregroundColor(.theme.textSecondary)
-                        
-                        HStack(spacing: Spacing.lg) {
-                            Button("Terms") {}
-                                .font(.halo.caption)
-                                .foregroundColor(.theme.textTertiary)
-                            
-                            Button("Privacy") {}
-                                .font(.halo.caption)
-                                .foregroundColor(.theme.textTertiary)
-                        }
-                        
-                        Text("Subscription automatically renews unless cancelled at least 24 hours before the current period ends.")
-                            .font(.halo.caption)
-                            .foregroundColor(.theme.textTertiary)
-                            .multilineTextAlignment(.center)
-                    }
-                    .padding(.vertical, Spacing.lg)
+                    Text("See your perfect look today")
+                        .font(.system(size: 17, weight: .medium))
+                        .foregroundColor(.white.opacity(0.8))
+                        .multilineTextAlignment(.center)
                 }
-                .padding(.horizontal, Spacing.lg)
+                .padding(.horizontal, 20)
+                
+                // Stacked selfies preview
+                ZStack {
+                    // Selfie 1 (back)
+                    Image("pw-selfie1")
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: imageSize, height: imageHeight)
+                        .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
+                        .rotationEffect(.degrees(-10))
+                        .offset(x: isSmallPhone ? -45 : -60, y: 15)
+                        .shadow(color: .black.opacity(0.3), radius: 12, y: 6)
+                    
+                    // Selfie 2 (middle)
+                    Image("pw-selfie2")
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: imageSize, height: imageHeight)
+                        .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
+                        .rotationEffect(.degrees(8))
+                        .offset(x: isSmallPhone ? 45 : 60, y: 10)
+                        .shadow(color: .black.opacity(0.3), radius: 12, y: 6)
+                    
+                    // Selfie 3 (front)
+                    Image("pw-selfie3")
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: imageSizeLarge, height: imageHeightLarge)
+                        .clipShape(RoundedRectangle(cornerRadius: 28, style: .continuous))
+                        .shadow(color: .black.opacity(0.4), radius: 18, y: 12)
+                }
+                .frame(height: stackHeight)
+                
+                Spacer()
             }
-            .opacity(isVisible ? 1 : 0)
+            
+            // Top buttons (Close + Restore)
+            VStack {
+                HStack {
+                    // Restore
+                    Button {
+                        Task {
+                            try? await subscriptionManager.restorePurchases()
+                            if subscriptionManager.isSubscribed {
+                                appState.navigateTo(.result)
+                            }
+                        }
+                    } label: {
+                        Text("Restore")
+                            .font(.system(size: 15, weight: .medium))
+                            .foregroundColor(.white.opacity(0.8))
+                    }
+                    .padding(.leading, 20)
+                    .shadow(color: .black.opacity(0.2), radius: 2, y: 1)
+                    
+                    Spacer()
+                    
+                    // Close
+                    Button {
+                        HapticManager.shared.buttonPress()
+                        appState.navigateTo(.home)
+                    } label: {
+                        Image(systemName: "xmark")
+                            .font(.system(size: 14, weight: .bold))
+                            .foregroundColor(.white.opacity(0.8))
+                            .frame(width: 32, height: 32)
+                            .background(.ultraThinMaterial, in: Circle())
+                    }
+                    .padding(.trailing, 20)
+                }
+                .padding(.top, 16)
+                Spacer()
+            }
         }
         .onAppear {
-            withAnimation(.haloSmooth) {
-                isVisible = true
-            }
-            // Refresh offerings
             Task {
                 await subscriptionManager.fetchOfferings()
             }
+            // Show sheet after delay
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                showPricingSheet = true
+            }
         }
+        .sheet(isPresented: $showPricingSheet) {
+            PricingMiniSheet()
+                .environmentObject(appState)
+                .environmentObject(subscriptionManager)
+                .presentationDetents([.height(sheetHeight)])
+                .presentationDragIndicator(.visible)
+                .presentationCornerRadius(32)
+                .presentationBackgroundInteraction(.enabled)
+                .interactiveDismissDisabled(true)
+        }
+    }
+    
+}
+
+// MARK: - Pricing Mini Sheet
+struct PricingMiniSheet: View {
+    
+    @EnvironmentObject private var appState: AppState
+    @EnvironmentObject private var subscriptionManager: SubscriptionManager
+    
+    @State private var selectedPlan: PlanType = .annual
+    @State private var isPurchasing = false
+    
+    var body: some View {
+        VStack(spacing: 16) {
+            // Plan cards
+            VStack(spacing: 10) {
+                // Yearly Plan
+                PlanCard(
+                    title: "Yearly",
+                    price: "$69.99/year",
+                    subtitle: "Only $5.83/month • Save 60%",
+                    isSelected: selectedPlan == .annual,
+                    action: {
+                        selectedPlan = .annual
+                        HapticManager.shared.buttonPress()
+                    }
+                )
+                
+                // Monthly Plan
+                PlanCard(
+                    title: "Monthly",
+                    price: "$14.99/month",
+                    subtitle: "Billed monthly",
+                    isSelected: selectedPlan == .monthly,
+                    action: {
+                        selectedPlan = .monthly
+                        HapticManager.shared.buttonPress()
+                    }
+                )
+            }
+            
+
+            
+            // CTA Button
+            Button {
+                Task { await handlePurchase() }
+            } label: {
+                Group {
+                    if isPurchasing {
+                        ProgressView()
+                            .tint(.black)
+                    } else {
+                        Text("Unlock Halo Studio")
+                            .font(.system(size: 17, weight: .semibold))
+                    }
+                }
+                .foregroundColor(.black)
+                .frame(maxWidth: .infinity)
+                .frame(height: 54)
+                .background(Color.white, in: Capsule())
+            }
+            .disabled(isPurchasing)
+            
+            // Social proof
+            HStack(spacing: 4) {
+                ForEach(0..<5, id: \.self) { _ in
+                    Image(systemName: "star.fill")
+                        .font(.system(size: 12))
+                        .foregroundColor(.black)
+                }
+                Text("4.8 • 2.3k ratings")
+                    .font(.system(size: 12))
+                    .foregroundColor(.secondary)
+            }
+            
+            // Footer
+            VStack(spacing: 4) {
+                Text("Auto-renewable • Cancel anytime")
+                    .font(.system(size: 11))
+                    .foregroundColor(.secondary)
+                
+                HStack(spacing: 8) {
+                    Button("Terms") { openURL("https://parallelventures.eu/terms-of-use/") }
+                    Text("•").foregroundColor(.secondary)
+                    Button("Privacy") { openURL("https://parallelventures.eu/privacy-policy/") }
+                }
+                .font(.system(size: 11, weight: .medium))
+                .foregroundColor(.primary.opacity(0.7))
+            }
+        }
+        .padding(.horizontal, 20)
+        .padding(.top, 10)
+        .padding(.bottom, 0)
         .alert("Error", isPresented: .constant(subscriptionManager.errorMessage != nil)) {
             Button("OK") { subscriptionManager.errorMessage = nil }
         } message: {
@@ -197,8 +245,17 @@ struct PaywallView: View {
         }
     }
     
-    private func purchase() async {
-        guard let package = selectedPackage else { return }
+    private func handlePurchase() async {
+        isPurchasing = true
+        
+        let package = selectedPlan == .annual ? subscriptionManager.annualPackage : subscriptionManager.monthlyPackage
+        
+        guard let package = package else {
+            print("❌ Error: Subscription package not found for \(selectedPlan)")
+            subscriptionManager.errorMessage = "Product not found. Please try again."
+            isPurchasing = false
+            return
+        }
         
         do {
             try await subscriptionManager.purchase(package)
@@ -208,96 +265,98 @@ struct PaywallView: View {
         } catch {
             // Error handled in manager
         }
+        
+        isPurchasing = false
+    }
+    
+    private func openURL(_ urlString: String) {
+        if let url = URL(string: urlString) {
+            UIApplication.shared.open(url)
+        }
     }
 }
 
-// MARK: - RevenueCat Pricing Card
-struct RevenueCatPricingCard: View {
-    let package: Package
-    let isPopular: Bool
+// MARK: - Plan Type
+enum PlanType {
+    case monthly
+    case annual
+}
+
+// MARK: - Plan Card
+struct PlanCard: View {
+    let title: String
+    let price: String
+    let subtitle: String
     let isSelected: Bool
     let action: () -> Void
-    
-    private var title: String {
-        switch package.packageType {
-        case .annual:
-            return "Annual"
-        case .monthly:
-            return "Monthly"
-        default:
-            return package.storeProduct.localizedTitle
-        }
-    }
-    
-    private var pricePerPeriod: String {
-        switch package.packageType {
-        case .annual:
-            return "\(package.localizedPricePerMonth)/mo"
-        case .monthly:
-            return "\(package.storeProduct.localizedPriceString)/mo"
-        default:
-            return package.storeProduct.localizedPriceString
-        }
-    }
-    
-    private var billingInfo: String {
-        switch package.packageType {
-        case .annual:
-            return "Billed \(package.storeProduct.localizedPriceString) annually"
-        case .monthly:
-            return "Billed monthly"
-        default:
-            return ""
-        }
-    }
     
     var body: some View {
         Button(action: action) {
             HStack {
-                VStack(alignment: .leading, spacing: 4) {
-                    HStack(spacing: 8) {
-                        Text(title)
-                            .font(.halo.labelLarge)
-                            .foregroundColor(.theme.textPrimary)
-                        
-                        if isPopular {
-                            Text("BEST VALUE")
-                                .font(.system(size: 10, weight: .bold))
-                                .foregroundColor(.black)
-                                .padding(.horizontal, 8)
-                                .padding(.vertical, 3)
-                                .background(
-                                    LinearGradient.haloPrimary,
-                                    in: Capsule()
-                                )
-                        }
-                    }
+                VStack(alignment: .leading, spacing: 6) {
+                    Text(title)
+                        .font(.system(size: 18, weight: .semibold))
+                        .foregroundColor(.primary)
                     
-                    Text(billingInfo)
-                        .font(.halo.caption)
-                        .foregroundColor(.theme.textSecondary)
+                    Text(subtitle)
+                        .font(.system(size: 14))
+                        .foregroundColor(.secondary)
                 }
                 
                 Spacer()
                 
-                Text(pricePerPeriod)
-                    .font(.halo.labelLarge)
-                    .foregroundColor(.theme.textPrimary)
+                Text(price)
+                    .font(.system(size: 17, weight: .bold))
+                    .foregroundColor(.primary)
             }
-            .padding(Spacing.md)
+            .padding(20)
             .background(
-                RoundedRectangle(cornerRadius: CornerRadius.lg)
-                    .fill(isSelected ? Color.theme.accentPrimary.opacity(0.15) : Color.theme.glassFill)
+                RoundedRectangle(cornerRadius: 20, style: .continuous)
+                    .fill(isSelected ? Color.blue.opacity(0.1) : Color.secondary.opacity(0.08))
             )
             .overlay(
-                RoundedRectangle(cornerRadius: CornerRadius.lg)
-                    .strokeBorder(
-                        isSelected ? Color.theme.accentPrimary : Color.theme.glassBorder,
-                        lineWidth: isSelected ? 2 : 1
-                    )
+                RoundedRectangle(cornerRadius: 20, style: .continuous)
+                    .strokeBorder(isSelected ? Color.blue : Color.clear, lineWidth: 2)
             )
         }
         .buttonStyle(.plain)
+    }
+}
+
+// MARK: - Paywall Bullet
+struct PaywallBullet: View {
+    let text: String
+    
+    var body: some View {
+        HStack(spacing: 12) {
+            Image(systemName: "checkmark.circle.fill")
+                .font(.system(size: 18))
+                .foregroundColor(.green)
+            
+            Text(text)
+                .font(.system(size: 15, weight: .medium))
+                .foregroundColor(.white.opacity(0.9))
+                .multilineTextAlignment(.leading)
+            
+            Spacer()
+        }
+    }
+}
+
+// MARK: - Bullet Point (for mini sheet)
+struct BulletPoint: View {
+    let text: String
+    
+    var body: some View {
+        HStack(spacing: 8) {
+            Text("•")
+                .font(.system(size: 14))
+                .foregroundColor(.secondary)
+            
+            Text(text)
+                .font(.system(size: 14))
+                .foregroundColor(.secondary)
+        }
     }
 }
 
@@ -305,5 +364,4 @@ struct RevenueCatPricingCard: View {
     PaywallView()
         .environmentObject(AppState())
         .environmentObject(SubscriptionManager.shared)
-        .preferredColorScheme(.dark)
 }

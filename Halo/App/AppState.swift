@@ -10,13 +10,12 @@ import Combine
 
 // MARK: - Screen Enum
 enum AppScreen: Equatable {
+    case splash
     case onboarding
-    case camera
     case processing
     case result
     case paywall
     case home
-    case history
 }
 
 // MARK: - App State
@@ -24,7 +23,7 @@ enum AppScreen: Equatable {
 final class AppState: ObservableObject {
     
     // MARK: - Published Properties
-    @Published var currentScreen: AppScreen = .onboarding
+    @Published var currentScreen: AppScreen = .splash
     @Published var hasCompletedOnboarding: Bool = false
     @Published var capturedImage: UIImage?
     @Published var generatedImage: UIImage?
@@ -32,6 +31,8 @@ final class AppState: ObservableObject {
     @Published var isLoading: Bool = false
     @Published var errorMessage: String?
     @Published var showCameraSheet: Bool = false
+    @Published var showHistorySheet: Bool = false
+    @Published var showPaywallSheet: Bool = false
     
     // MARK: - UserDefaults Keys
     private enum Keys {
@@ -46,19 +47,23 @@ final class AppState: ObservableObject {
     // MARK: - State Persistence
     private func loadPersistedState() {
         hasCompletedOnboarding = UserDefaults.standard.bool(forKey: Keys.hasCompletedOnboarding)
+    }
+    
+    func performBootSequence() async {
+        // Artificial delay for splash screen
+        try? await Task.sleep(nanoseconds: 2_000_000_000) // 2 seconds delay
         
-        // If onboarding completed but not subscribed, go to home
-        // Otherwise start with onboarding
-        if hasCompletedOnboarding {
-            currentScreen = .home
-        }
+        let destination: AppScreen = hasCompletedOnboarding ? .home : .onboarding
+        navigateTo(destination)
     }
     
     func completeOnboarding() {
         hasCompletedOnboarding = true
         UserDefaults.standard.set(true, forKey: Keys.hasCompletedOnboarding)
-        navigateTo(.camera)
+        navigateTo(.home)
+        showCameraSheet = true
     }
+    
     
     // MARK: - Navigation
     func navigateTo(_ screen: AppScreen) {
@@ -70,6 +75,7 @@ final class AppState: ObservableObject {
     // MARK: - Image Handling
     func setCapturedImage(_ image: UIImage) {
         capturedImage = image
+        showCameraSheet = false  // Close the sheet first
         navigateTo(.processing)
     }
     
@@ -104,7 +110,8 @@ final class AppState: ObservableObject {
     
     func startNewTryOn() {
         reset()
-        navigateTo(.camera)
+        navigateTo(.home)
+        showCameraSheet = true
     }
 }
 

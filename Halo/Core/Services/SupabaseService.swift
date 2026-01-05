@@ -39,8 +39,12 @@ struct HairstyleGeneration: Identifiable, Codable {
     let imagePath: String
     let createdAt: Date
     
+    // Signed URL for private bucket access (set after fetch)
+    var signedImageURL: URL?
+    
     var imageURL: URL? {
-        URL(string: "\(SupabaseConfig.projectURL)/storage/v1/object/public/hairstyles/\(imagePath)")
+        // Use signed URL if available, otherwise fallback to public URL
+        signedImageURL ?? URL(string: "\(SupabaseConfig.projectURL)/storage/v1/object/public/hairstyles/\(imagePath)")
     }
     
     enum CodingKeys: String, CodingKey {
@@ -50,6 +54,7 @@ struct HairstyleGeneration: Identifiable, Codable {
         case styleCategory = "style_category"
         case imagePath = "image_path"
         case createdAt = "created_at"
+        // signedImageURL is not in JSON, computed after fetch
     }
 }
 
@@ -89,12 +94,20 @@ final class SupabaseStorageService: ObservableObject {
         try await uploadImage(data: imageData, path: path)
         
         // Save metadata to database
-        let generation = try await saveMetadata(
+        var generation = try await saveMetadata(
             userId: userId,
             styleName: styleName,
             category: category,
             imagePath: path
         )
+        
+        // Generate signed URL for the new generation
+        do {
+            let signedURL = try await getSignedURL(for: path)
+            generation.signedImageURL = signedURL
+        } catch {
+            print("⚠️ Failed to get signed URL for new generation: \(error)")
+        }
         
         // Update local list
         await MainActor.run {
@@ -213,8 +226,18 @@ final class SupabaseStorageService: ObservableObject {
             let decoder = JSONDecoder()
             decoder.dateDecodingStrategy = .iso8601
             
-            let items = try decoder.decode([HairstyleGeneration].self, from: data)
+            var items = try decoder.decode([HairstyleGeneration].self, from: data)
             print("✅ Fetched \(items.count) generations")
+            
+            // Generate signed URLs for private bucket access
+            for i in 0..<items.count {
+                do {
+                    let signedURL = try await getSignedURL(for: items[i].imagePath)
+                    items[i].signedImageURL = signedURL
+                } catch {
+                    print("⚠️ Failed to get signed URL for \(items[i].imagePath): \(error)")
+                }
+            }
             
             await MainActor.run {
                 self.generations = items
@@ -236,20 +259,34 @@ final class SupabaseStorageService: ObservableObject {
         
         let body = ["expiresIn": 3600] // 1 hour
         
+        // Use user's access token for private bucket access
+        let authToken = SupabaseAuth.accessToken ?? SupabaseConfig.anonKey
+        
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-        request.setValue("Bearer \(SupabaseConfig.anonKey)", forHTTPHeaderField: "Authorization")
+        request.setValue("Bearer \(authToken)", forHTTPHeaderField: "Authorization")
         request.setValue(SupabaseConfig.anonKey, forHTTPHeaderField: "apikey")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = try JSONSerialization.data(withJSONObject: body)
         
-        let (data, _) = try await session.data(for: request)
+        let (data, response) = try await session.data(for: request)
+        
+        if let httpResponse = response as? HTTPURLResponse {
+            print("📝 Signed URL response status: \(httpResponse.statusCode)")
+        }
+        
+        if let responseString = String(data: data, encoding: .utf8) {
+            print("📝 Signed URL response: \(responseString)")
+        }
         
         guard let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
-              let signedPath = json["signedURL"] as? String,
-              let signedURL = URL(string: "\(SupabaseConfig.projectURL)\(signedPath)") else {
+              let signedPath = json["signedURL"] as? String else {
+            print("❌ Failed to parse signed URL response")
             throw StorageError.signFailed
         }
+        
+        let signedURL = URL(string: "\(SupabaseConfig.projectURL)/storage/v1\(signedPath)")!
+        print("✅ Generated signed URL: \(signedURL)")
         
         return signedURL
     }
