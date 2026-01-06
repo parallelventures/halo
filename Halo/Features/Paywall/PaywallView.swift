@@ -15,17 +15,44 @@ struct PaywallView: View {
     
     @State private var showPricingSheet = false
     
+    // Device detection
+    private var isIPad: Bool { UIDevice.current.userInterfaceIdiom == .pad }
     private var isLargePhone: Bool { UIScreen.main.bounds.height >= 800 }
     private var isSmallPhone: Bool { UIScreen.main.bounds.height < 700 }
     
-    // Responsive dimensions
-    private var imageSize: CGFloat { isSmallPhone ? 140 : (isLargePhone ? 200 : 180) }
-    private var imageSizeLarge: CGFloat { isSmallPhone ? 160 : (isLargePhone ? 220 : 200) }
-    private var imageHeight: CGFloat { isSmallPhone ? 180 : (isLargePhone ? 270 : 240) }
-    private var imageHeightLarge: CGFloat { isSmallPhone ? 200 : (isLargePhone ? 290 : 270) }
-    private var stackHeight: CGFloat { isSmallPhone ? 220 : (isLargePhone ? 340 : 300) }
-    private var topSpacing: CGFloat { isSmallPhone ? 20 : (isLargePhone ? 60 : 40) }
-    private var sheetHeight: CGFloat { isSmallPhone ? 340 : 380 }
+    // Responsive dimensions - Supports iPhone mini to iPad
+    private var imageSize: CGFloat { 
+        if isIPad { return 280 }
+        return isSmallPhone ? 100 : (isLargePhone ? 200 : 180) 
+    }
+    private var imageSizeLarge: CGFloat { 
+        if isIPad { return 320 }
+        return isSmallPhone ? 120 : (isLargePhone ? 220 : 200) 
+    }
+    private var imageHeight: CGFloat { 
+        if isIPad { return 380 }
+        return isSmallPhone ? 130 : (isLargePhone ? 270 : 240) 
+    }
+    private var imageHeightLarge: CGFloat { 
+        if isIPad { return 420 }
+        return isSmallPhone ? 150 : (isLargePhone ? 290 : 270) 
+    }
+    private var stackHeight: CGFloat { 
+        if isIPad { return 450 }
+        return isSmallPhone ? 160 : (isLargePhone ? 340 : 300) 
+    }
+    private var topSpacing: CGFloat { 
+        if isIPad { return 80 }
+        return isSmallPhone ? 10 : (isLargePhone ? 60 : 40) 
+    }
+    private var sheetHeight: CGFloat { 
+        if isIPad { return 450 }
+        return isSmallPhone ? 320 : 380 
+    }
+    private var imageOffset: CGFloat { 
+        if isIPad { return 100 }
+        return isSmallPhone ? 35 : 60 
+    }
     
     var body: some View {
         ZStack {
@@ -61,7 +88,7 @@ struct PaywallView: View {
                         .frame(width: imageSize, height: imageHeight)
                         .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
                         .rotationEffect(.degrees(-10))
-                        .offset(x: isSmallPhone ? -45 : -60, y: 15)
+                        .offset(x: -imageOffset, y: 15)
                         .shadow(color: .black.opacity(0.3), radius: 12, y: 6)
                     
                     // Selfie 2 (middle)
@@ -71,7 +98,7 @@ struct PaywallView: View {
                         .frame(width: imageSize, height: imageHeight)
                         .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
                         .rotationEffect(.degrees(8))
-                        .offset(x: isSmallPhone ? 45 : 60, y: 10)
+                        .offset(x: imageOffset, y: 10)
                         .shadow(color: .black.opacity(0.3), radius: 12, y: 6)
                     
                     // Selfie 3 (front)
@@ -248,11 +275,17 @@ struct PricingMiniSheet: View {
     private func handlePurchase() async {
         isPurchasing = true
         
+        // Retry fetching offerings if not loaded
+        if subscriptionManager.offerings == nil || subscriptionManager.allPackages.isEmpty {
+            await subscriptionManager.fetchOfferings()
+            // Wait a bit for offerings to load
+            try? await Task.sleep(nanoseconds: 500_000_000)
+        }
+        
         let package = selectedPlan == .annual ? subscriptionManager.annualPackage : subscriptionManager.monthlyPackage
         
         guard let package = package else {
-            print("❌ Error: Subscription package not found for \(selectedPlan)")
-            subscriptionManager.errorMessage = "Product not found. Please try again."
+            subscriptionManager.errorMessage = "Unable to load subscription. Please try again."
             isPurchasing = false
             return
         }

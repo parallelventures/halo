@@ -42,6 +42,8 @@ struct CameraView: View {
     @State private var showingPhotoPicker = false
     @State private var selectedPhotoItem: PhotosPickerItem?
     @State private var showStyleSheet = false
+    @State private var showInstructions = true
+
     
     var body: some View {
         ZStack {
@@ -99,7 +101,7 @@ struct CameraView: View {
                 
                 // Bottom section
                 VStack(spacing: Spacing.lg) {
-                    // Selected style indicator
+                    // Selected style indicator (Instructions moved to ZStack overlay)
                     if let style = appState.selectedHairstyle {
                         Text(style.name)
                             .font(.halo.labelMedium)
@@ -187,6 +189,23 @@ struct CameraView: View {
         .onChange(of: selectedPhotoItem) { _, newValue in
             Task { await loadPhoto(newValue) }
         }
+        // Native Instruction Sheet
+        .sheet(isPresented: $showInstructions) {
+            InstructionSheetView(showInstructions: $showInstructions)
+                .presentationDetents([.fraction(0.4), .medium])
+                .presentationDragIndicator(.visible)
+                .presentationBackground {
+                    if #available(iOS 26.0, *) {
+                        Rectangle()
+                            .fill(.clear)
+                            .glassEffect(.regular, in: Rectangle())
+                    } else {
+                        Rectangle()
+                            .fill(.ultraThinMaterial)
+                    }
+                }
+                .interactiveDismissDisabled(false)
+        }
         .onAppear {
             Task {
                 await cameraService.checkAuthorization()
@@ -233,6 +252,66 @@ struct CameraView: View {
            let image = UIImage(data: data) {
             appState.setCapturedImage(image)
         }
+    }
+}
+
+// MARK: - Instruction Sheet Content
+struct InstructionSheetView: View {
+    @Binding var showInstructions: Bool
+    
+    var body: some View {
+        VStack(spacing: 24) {
+            Text("How to get the best result")
+                .font(.title3.bold())
+                .padding(.top, 24)
+            
+            HStack(spacing: 30) {
+                InstructionItem(icon: "sparkles", title: "Choose Style", subtitle: "Pick a look first")
+                InstructionItem(icon: "face.smiling", title: "Face Forward", subtitle: "No glasses")
+                InstructionItem(icon: "sun.max.fill", title: "Good Light", subtitle: "Avoid shadows")
+            }
+            
+            Spacer()
+            
+            Button {
+                showInstructions = false
+            } label: {
+                Text("I'm Ready")
+                    .font(.headline)
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 50)
+                    .background(Color.black, in: Capsule())
+            }
+            .padding(.horizontal, 24)
+            .padding(.bottom, 16)
+        }
+        // Background removed
+    }
+}
+
+struct InstructionItem: View {
+    let icon: String
+    let title: String
+    let subtitle: String
+    
+    var body: some View {
+        VStack(spacing: 8) {
+            Image(systemName: icon)
+                .font(.title2)
+                .frame(width: 50, height: 50)
+                .background(Color.secondary.opacity(0.1), in: Circle())
+            
+            VStack(spacing: 2) {
+                Text(title)
+                    .font(.caption.bold())
+                Text(subtitle)
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                    .multilineTextAlignment(.center)
+            }
+        }
+        .frame(maxWidth: .infinity)
     }
 }
 
@@ -328,7 +407,7 @@ struct StylePickerSheet: View {
 struct ScaleButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .scaleEffect(configuration.isPressed ? 0.9 : 1)
-            .animation(.spring(response: 0.2, dampingFraction: 0.6), value: configuration.isPressed)
+            .scaleEffect(configuration.isPressed ? 0.97 : 1)
+            .animation(.spring(response: 0.2, dampingFraction: 0.7), value: configuration.isPressed)
     }
 }

@@ -82,20 +82,8 @@ final class AppState: ObservableObject {
     func setGeneratedImage(_ image: UIImage) {
         generatedImage = image
         
-        // Save to Supabase Storage
-        if let hairstyle = selectedHairstyle {
-            Task {
-                do {
-                    _ = try await SupabaseStorageService.shared.saveGeneration(
-                        image: image,
-                        styleName: hairstyle.name,
-                        category: hairstyle.category.rawValue
-                    )
-                } catch {
-                    print("Failed to save to history: \(error)")
-                }
-            }
-        }
+        // TODO: Save generation logic moved to ProcessingView using GenerationService
+        // GenerationService.shared.save...
         
         navigateTo(.result)
     }

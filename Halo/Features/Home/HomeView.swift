@@ -403,7 +403,7 @@ struct AccountSheet: View {
     
     var body: some View {
         NavigationStack {
-            ScrollView {
+            ScrollView(showsIndicators: false) {
                 VStack(spacing: 24) {
                     // Profile Section
                     VStack(spacing: 12) {

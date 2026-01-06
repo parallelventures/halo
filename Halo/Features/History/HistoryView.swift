@@ -11,9 +11,9 @@ struct HistoryView: View {
     
     @EnvironmentObject private var appState: AppState
     @Environment(\.dismiss) private var dismiss
-    @StateObject private var storageService = SupabaseStorageService.shared
+    @StateObject private var generationService = GenerationService.shared
     
-    @State private var selectedGeneration: HairstyleGeneration?
+    @State private var selectedGeneration: Generation?
     
     private let columns = [
         GridItem(.flexible(), spacing: 12),
@@ -30,12 +30,12 @@ struct HistoryView: View {
                 VStack(spacing: 0) {
                     Color.clear.frame(height: 60) // Spacer for nav bar
                     
-                    if storageService.isLoading && storageService.generations.isEmpty {
+                    if generationService.isLoading && generationService.generations.isEmpty {
                         Spacer()
                         ProgressView()
                             .tint(.white)
                         Spacer()
-                    } else if storageService.generations.isEmpty {
+                    } else if generationService.generations.isEmpty {
                         Spacer()
                         emptyState
                         Spacer()
@@ -81,7 +81,8 @@ struct HistoryView: View {
             .navigationBarHidden(true)
         }
         .task {
-            await storageService.fetchHistory()
+            // Refresh history when view appears
+            await generationService.fetchGenerations()
         }
         .sheet(item: $selectedGeneration) { generation in
             HistoryDetailView(generation: generation)
@@ -119,7 +120,7 @@ struct HistoryView: View {
     private var historyGrid: some View {
         ScrollView {
             LazyVGrid(columns: columns, spacing: 12) {
-                ForEach(storageService.generations) { generation in
+                ForEach(generationService.generations) { generation in
                     HistoryCell(generation: generation)
                         .onTapGesture {
                             selectedGeneration = generation
@@ -129,19 +130,19 @@ struct HistoryView: View {
             .padding(16)
         }
         .refreshable {
-            await storageService.fetchHistory()
+            await generationService.fetchGenerations()
         }
     }
 }
 
 // MARK: - History Cell
 struct HistoryCell: View {
-    let generation: HairstyleGeneration
+    let generation: Generation
     
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
-            // Image
-            AsyncImage(url: generation.imageURL) { phase in
+            // Image (Thumbnail or generated)
+            AsyncImage(url: URL(string: generation.thumbnailUrl ?? generation.generatedImageUrl ?? "")) { phase in
                 switch phase {
                 case .empty:
                     Rectangle()
@@ -170,7 +171,7 @@ struct HistoryCell: View {
             
             // Info
             VStack(alignment: .leading, spacing: 2) {
-                Text(generation.styleName)
+                Text(generation.styleName ?? "Unknown")
                     .font(.system(size: 12, weight: .medium))
                     .foregroundColor(.white)
                     .lineLimit(1)
@@ -185,7 +186,7 @@ struct HistoryCell: View {
 
 // MARK: - History Detail View
 struct HistoryDetailView: View {
-    let generation: HairstyleGeneration
+    let generation: Generation
     @Environment(\.dismiss) private var dismiss
     @State private var showDeleteConfirm = false
     
@@ -195,8 +196,8 @@ struct HistoryDetailView: View {
                 Color.black.ignoresSafeArea()
                 
                 VStack(spacing: 20) {
-                    // Image
-                    AsyncImage(url: generation.imageURL) { phase in
+                    // Image (Full res)
+                    AsyncImage(url: URL(string: generation.generatedImageUrl ?? "")) { phase in
                         switch phase {
                         case .empty:
                             Rectangle()
@@ -220,7 +221,7 @@ struct HistoryDetailView: View {
                     
                     // Info
                     VStack(spacing: 8) {
-                        Text(generation.styleName)
+                        Text(generation.styleName ?? "Unknown")
                             .font(.system(size: 20, weight: .semibold))
                             .foregroundColor(.white)
                         
@@ -291,7 +292,7 @@ struct HistoryDetailView: View {
             .confirmationDialog("Delete this hairstyle?", isPresented: $showDeleteConfirm) {
                 Button("Delete", role: .destructive) {
                     Task {
-                        try? await SupabaseStorageService.shared.deleteGeneration(generation)
+                        await GenerationService.shared.deleteGeneration(generationId: generation.id)
                         dismiss()
                     }
                 }
@@ -300,7 +301,7 @@ struct HistoryDetailView: View {
     }
     
     private func shareImage() {
-        guard let url = generation.imageURL else { return }
+        guard let urlString = generation.generatedImageUrl, let url = URL(string: urlString) else { return }
         
         Task {
             if let (data, _) = try? await URLSession.shared.data(from: url),
@@ -320,7 +321,7 @@ struct HistoryDetailView: View {
     }
     
     private func downloadImage() {
-        guard let url = generation.imageURL else { return }
+        guard let urlString = generation.generatedImageUrl, let url = URL(string: urlString) else { return }
         
         Task {
             if let (data, _) = try? await URLSession.shared.data(from: url),
@@ -333,11 +334,6 @@ struct HistoryDetailView: View {
             }
         }
     }
-}
-
-#Preview {
-    HistoryView()
-        .environmentObject(AppState())
 }
 
 // MARK: - Glass Button Capsule Extension
@@ -362,10 +358,15 @@ extension View {
                     .glassEffect(.regular, in: .capsule)
             }
         } else {
+            // Fallback for iOS < 26
             switch style {
             case .clear:
                 self
                     .background(.ultraThinMaterial, in: Capsule())
+                    .overlay(
+                        Capsule()
+                            .strokeBorder(Color.white.opacity(0.2), lineWidth: 1)
+                    )
             case .white:
                 self
                     .background(Color.white, in: Capsule())

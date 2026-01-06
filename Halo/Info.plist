@@ -36,9 +36,13 @@
     <array>
         <string>UIInterfaceOrientationPortrait</string>
     </array>
+    <key>UIDeviceFamily</key>
+    <array>
+        <integer>1</integer>
+    </array>
     <key>UIRequiredDeviceCapabilities</key>
     <array>
-        <string>armv7</string>
+        <string>arm64</string>
     </array>
     <key>ITSAppUsesNonExemptEncryption</key>
     <false/>

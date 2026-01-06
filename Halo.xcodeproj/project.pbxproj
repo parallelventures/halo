@@ -36,6 +36,9 @@
 		A19D36182F0AD9580053724B /* VariableBlur.swift in Sources */ = {isa = PBXBuildFile; fileRef = A19D36172F0AD9580053724B /* VariableBlur.swift */; };
 		A19D361C2F0B0C360053724B /* Agrandir Narrow Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = A19D36192F0B0C360053724B /* Agrandir Narrow Bold.otf */; };
 		A19D361F2F0B36040053724B /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A19D361D2F0B36040053724B /* HistoryView.swift */; };
+		A19D36222F0C9BA50053724B /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A19D36212F0C9BA50053724B /* StoreKit.framework */; };
+		A19D36262F0D12340053724B /* OnboardingDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A19D36252F0D12340053724B /* OnboardingDataService.swift */; };
+		A19D36282F0D12340053724B /* GenerationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A19D36272F0D12340053724B /* GenerationService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -67,6 +70,9 @@
 		A19D36192F0B0C360053724B /* Agrandir Narrow Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Agrandir Narrow Bold.otf"; sourceTree = "<group>"; };
 		A19D361D2F0B36040053724B /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
 		A19D36202F0C108E0053724B /* Halo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Halo.entitlements; sourceTree = "<group>"; };
+		A19D36212F0C9BA50053724B /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		A19D36252F0D12340053724B /* OnboardingDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingDataService.swift; sourceTree = "<group>"; };
+		A19D36272F0D12340053724B /* GenerationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenerationService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -81,6 +87,7 @@
 				A19D360C2F09BBEF0053724B /* GoogleSignIn in Frameworks */,
 				A19D360E2F09BBEF0053724B /* GoogleSignInSwift in Frameworks */,
 				A19D36122F0AAA560053724B /* RevenueCat in Frameworks */,
+				A19D36222F0C9BA50053724B /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -179,6 +186,8 @@
 				A19D36002F09B6350053724B /* SupabaseService.swift */,
 				A19D36022F09B63B0053724B /* AuthService.swift */,
 				A183E71F2F058271009023E4 /* SubscriptionManager.swift */,
+				A19D36252F0D12340053724B /* OnboardingDataService.swift */,
+				A19D36272F0D12340053724B /* GenerationService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -262,6 +271,7 @@
 		A19D36102F0AAA560053724B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A19D36212F0C9BA50053724B /* StoreKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -389,6 +399,8 @@
 				A183E73E2F058271009023E4 /* Theme.swift in Sources */,
 				A183E73F2F058271009023E4 /* ResultView.swift in Sources */,
 				A183E7402F058271009023E4 /* ProcessingView.swift in Sources */,
+				A19D36262F0D12340053724B /* OnboardingDataService.swift in Sources */,
+				A19D36282F0D12340053724B /* GenerationService.swift in Sources */,
 				00000003 /* ContentView.swift in Sources */,
 				00000001 /* HaloApp.swift in Sources */,
 			);
@@ -523,7 +535,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Halo/Halo.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Halo/Preview Content\"";
 				DEVELOPMENT_TEAM = 3D2TMTBDFN;
 				ENABLE_PREVIEWS = YES;
@@ -542,7 +554,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1.12;
 				PRODUCT_BUNDLE_IDENTIFIER = com.parallelventures.halo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -562,7 +574,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Halo/Halo.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Halo/Preview Content\"";
 				DEVELOPMENT_TEAM = 3D2TMTBDFN;
 				ENABLE_PREVIEWS = YES;
@@ -581,7 +593,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1.12;
 				PRODUCT_BUNDLE_IDENTIFIER = com.parallelventures.halo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

@@ -253,9 +253,34 @@ struct ProcessingView: View {
             }
             
             do {
+                // Start timing
+                let startTime = Date()
+                
+                // 1. Create generation record (uploads original image)
+                // We do this BEFORE AI generation to track the attempt
+                guard let generation = await GenerationService.shared.createGeneration(
+                    originalImage: capturedImage,
+                    styleName: hairstyle.name,
+                    styleCategory: hairstyle.category.rawValue,
+                    stylePrompt: hairstyle.prompt
+                ) else {
+                    throw URLError(.cannotCreateFile) // Generic error if fails to init
+                }
+                
+                // 2. Generate with AI
                 let generated = try await GeminiAPIService.shared.generateHairstyle(
                     from: capturedImage,
                     prompt: hairstyle.prompt
+                )
+                
+                // Calculate duration
+                let durationMs = Int(Date().timeIntervalSince(startTime) * 1000)
+                
+                // 3. Update record with result (uploads result image)
+                _ = await GenerationService.shared.updateGenerationResult(
+                    generationId: generation.id,
+                    generatedImage: generated,
+                    processingTimeMs: durationMs
                 )
                 
                 progressTask.cancel()
@@ -263,8 +288,6 @@ struct ProcessingView: View {
                 await MainActor.run {
                     progress = 1.0
                 }
-                
-                try? await Task.sleep(nanoseconds: 300_000_000)
                 
                 await MainActor.run {
                     // Store in appState
@@ -274,19 +297,6 @@ struct ProcessingView: View {
                     withAnimation(.easeInOut(duration: 0.5)) {
                         generatedImage = generated
                         isComplete = true
-                    }
-                    
-                    // Save to history
-                    Task {
-                        do {
-                            _ = try await SupabaseStorageService.shared.saveGeneration(
-                                image: generated,
-                                styleName: hairstyle.name,
-                                category: hairstyle.category.rawValue
-                            )
-                        } catch {
-                            print("Failed to save to history: \(error)")
-                        }
                     }
                 }
                 

@@ -137,6 +137,11 @@ final class AuthService: NSObject, ObservableObject {
             await SubscriptionManager.shared.login(userID: userId)
         }
         
+        // Sync onboarding data to Supabase
+        Task {
+            await OnboardingDataService.shared.syncToSupabase()
+        }
+        
         authState = .authenticated(userId: userId)
     }
     
