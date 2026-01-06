@@ -44,6 +44,10 @@ struct RootView: View {
                     PaywallView()
                         .transition(.move(edge: .bottom))
                     
+                case .auth:
+                    AuthView()
+                        .transition(.opacity)
+                    
                 case .home:
                     HomeView()
                         .transition(.opacity)

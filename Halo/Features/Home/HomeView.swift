@@ -73,7 +73,7 @@ struct HomeView: View {
                                     Text("Take Selfie")
                                         .font(.system(size: 13, weight: .semibold))
                                         .foregroundColor(.white)
-                                        .padding(.horizontal, 16)
+                                        .padding(.horizontal, 12)
                                         .padding(.vertical, 8)
                                         .glassBubbleStyle()
                                         .padding(.bottom, 12)
@@ -128,7 +128,7 @@ struct HomeView: View {
                                     Text("From Gallery")
                                         .font(.system(size: 13, weight: .semibold))
                                         .foregroundColor(.white)
-                                        .padding(.horizontal, 16)
+                                        .padding(.horizontal, 12)
                                         .padding(.vertical, 8)
                                         .glassBubbleStyle()
                                         .padding(.bottom, 12)
@@ -413,10 +413,8 @@ struct AccountSheet: View {
                         
                         if subscriptionManager.isSubscribed {
                             HStack(spacing: 6) {
-                                Image(systemName: "crown.fill")
-                                    .font(.system(size: 12))
-                                    .foregroundColor(.yellow)
-                                Text("Pro Member")
+                                ProBadge(size: 14, color: .white)
+                                Text("Halo Studio")
                                     .font(.system(size: 16, weight: .semibold))
                                     .foregroundColor(.white)
                             }
@@ -431,10 +429,9 @@ struct AccountSheet: View {
                     // Subscription Section
                     VStack(spacing: 0) {
                         if !subscriptionManager.isSubscribed {
-                            AccountRow(
-                                icon: "crown.fill",
-                                iconColor: .yellow,
-                                title: "Upgrade to Pro",
+                            AccountRowCustomIcon(
+                                icon: AnyView(ProBadge(size: 24, color: .white)),
+                                title: "Unlock Halo Studio",
                                 subtitle: "Unlock unlimited generations"
                             ) {
                                 // Navigate to paywall
@@ -444,111 +441,112 @@ struct AccountSheet: View {
                                 }
                             }
                             
-                            Divider().background(Color.white.opacity(0.1))
+                            Divider().background(Color.white.opacity(0.1)).padding(.horizontal, 12).padding(.horizontal, 12)
                         }
                         
                         AccountRow(
-                            icon: "creditcard",
-                            iconColor: .blue,
+                            icon: "gearshape.fill",
+                            iconColor: .white,
                             title: "Manage Subscription",
-                            subtitle: subscriptionManager.isSubscribed ? "View or cancel" : "Restore purchases"
+                            subtitle: "View or cancel your plan"
                         ) {
-                            if subscriptionManager.isSubscribed {
-                                openSubscriptionSettings()
-                            } else {
-                                Task {
-                                    try? await subscriptionManager.restorePurchases()
-                                }
+                            openSubscriptionSettings()
+                        }
+                        
+                        Divider().background(Color.white.opacity(0.1)).padding(.horizontal, 12)
+                        
+                        AccountRow(
+                            icon: "arrow.clockwise",
+                            iconColor: .white,
+                            title: "Restore Purchases",
+                            subtitle: "Recover your subscription"
+                        ) {
+                            Task {
+                                try? await subscriptionManager.restorePurchases()
                             }
                         }
                     }
-                    .background(Color.white.opacity(0.05))
-                    .clipShape(RoundedRectangle(cornerRadius: 16))
+                    .background(Color.gray.opacity(0.15))
+                    .clipShape(RoundedRectangle(cornerRadius: 20))
                     .padding(.horizontal, 20)
                     
                     // Feedback Section
                     VStack(spacing: 0) {
-                        AccountRow(
-                            icon: "star.fill",
-                            iconColor: .orange,
+                        AccountRowCustomIcon(
+                            icon: AnyView(RateBadge(size: 24, color: .white)),
                             title: "Rate Halo",
                             subtitle: "Love the app? Leave a review!"
                         ) {
                             requestReview()
                         }
                         
-                        Divider().background(Color.white.opacity(0.1))
+                        Divider().background(Color.white.opacity(0.1)).padding(.horizontal, 12)
                         
-                        AccountRow(
-                            icon: "envelope.fill",
-                            iconColor: .green,
+                        AccountRowCustomIcon(
+                            icon: AnyView(FeedbackBadge(size: 24, color: .white)),
                             title: "Send Feedback",
                             subtitle: "We'd love to hear from you"
                         ) {
                             sendFeedback()
                         }
                         
-                        Divider().background(Color.white.opacity(0.1))
+                        Divider().background(Color.white.opacity(0.1)).padding(.horizontal, 12)
                         
                         AccountRow(
                             icon: "questionmark.circle.fill",
-                            iconColor: .purple,
+                            iconColor: .white,
                             title: "Help & Support",
                             subtitle: "Get help with Halo"
                         ) {
                             openURL("https://parallelventures.eu/support/")
                         }
                         
-                        Divider().background(Color.white.opacity(0.1))
+                        Divider().background(Color.white.opacity(0.1)).padding(.horizontal, 12)
                         
-                        AccountRow(
-                            icon: "doc.text.fill",
-                            iconColor: .gray,
+                        AccountRowCustomIcon(
+                            icon: AnyView(PrivacyBadge(size: 24, color: .white)),
                             title: "Privacy Policy",
                             subtitle: nil
                         ) {
                             openURL("https://parallelventures.eu/privacy-policy/")
                         }
                         
-                        Divider().background(Color.white.opacity(0.1))
+                        Divider().background(Color.white.opacity(0.1)).padding(.horizontal, 12)
                         
-                        AccountRow(
-                            icon: "doc.text.fill",
-                            iconColor: .gray,
+                        AccountRowCustomIcon(
+                            icon: AnyView(TermsBadge(size: 24, color: .white)),
                             title: "Terms of Service",
                             subtitle: nil
                         ) {
                             openURL("https://parallelventures.eu/terms-of-use/")
                         }
                     }
-                    .background(Color.white.opacity(0.05))
-                    .clipShape(RoundedRectangle(cornerRadius: 16))
+                    .background(Color.gray.opacity(0.15))
+                    .clipShape(RoundedRectangle(cornerRadius: 20))
                     .padding(.horizontal, 20)
                     
                     // Account Actions
                     VStack(spacing: 0) {
-                        AccountRow(
-                            icon: "rectangle.portrait.and.arrow.right",
-                            iconColor: .red,
+                        AccountRowCustomIcon(
+                            icon: AnyView(LogoutBadge(size: 24, color: .white)),
                             title: "Log Out",
                             subtitle: nil
                         ) {
                             showLogoutAlert = true
                         }
                         
-                        Divider().background(Color.white.opacity(0.1))
+                        Divider().background(Color.white.opacity(0.1)).padding(.horizontal, 12)
                         
-                        AccountRow(
-                            icon: "trash.fill",
-                            iconColor: .red,
+                        AccountRowCustomIcon(
+                            icon: AnyView(DeleteBadge(size: 24, color: .red)),
                             title: "Delete Account",
                             subtitle: "Permanently remove your data"
                         ) {
                             showDeleteAlert = true
                         }
                     }
-                    .background(Color.white.opacity(0.05))
-                    .clipShape(RoundedRectangle(cornerRadius: 16))
+                    .background(Color.gray.opacity(0.15))
+                    .clipShape(RoundedRectangle(cornerRadius: 20))
                     .padding(.horizontal, 20)
                     
                     // App Version
@@ -562,15 +560,18 @@ struct AccountSheet: View {
                     Spacer(minLength: 40)
                 }
             }
-            .background(Color.black)
+            .background(Color(white: 0.06))  // Dark gray instead of pure black
             .navigationTitle("Account")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("Done") {
+                    Button {
                         dismiss()
+                    } label: {
+                        Image(systemName: "xmark")
+                            .font(.system(size: 14, weight: .semibold))
+                            .foregroundColor(.white.opacity(0.8))
                     }
-                    .foregroundColor(.white)
                 }
             }
             .alert("Log Out", isPresented: $showLogoutAlert) {
@@ -662,7 +663,48 @@ struct AccountRow: View {
                     .font(.system(size: 14, weight: .medium))
                     .foregroundColor(.white.opacity(0.3))
             }
-            .padding(.horizontal, 16)
+            .padding(.horizontal, 12)
+            .padding(.vertical, 14)
+        }
+    }
+}
+
+// MARK: - Account Row with Custom Icon
+struct AccountRowCustomIcon<Icon: View>: View {
+    let icon: Icon
+    let title: String
+    let subtitle: String?
+    let action: () -> Void
+    
+    var body: some View {
+        Button(action: action) {
+            HStack(spacing: 14) {
+                HStack {
+                    Spacer()
+                    icon
+                    Spacer()
+                }
+                .frame(width: 28)
+                
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(title)
+                        .font(.system(size: 16, weight: .medium))
+                        .foregroundColor(.white)
+                    
+                    if let subtitle = subtitle {
+                        Text(subtitle)
+                            .font(.system(size: 13))
+                            .foregroundColor(.white.opacity(0.5))
+                    }
+                }
+                
+                Spacer()
+                
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 14, weight: .medium))
+                    .foregroundColor(.white.opacity(0.3))
+            }
+            .padding(.horizontal, 12)
             .padding(.vertical, 14)
         }
     }

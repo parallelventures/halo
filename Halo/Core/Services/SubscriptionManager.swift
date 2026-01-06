@@ -50,10 +50,7 @@ final class SubscriptionManager: NSObject, ObservableObject {
         offerings?.current?.availablePackages ?? []
     }
     
-    // Debug mode for testing
-    #if DEBUG
-    private var debugForceSubscribed = false
-    #endif
+    // Debug mode removed for security
     
     // MARK: - Init
     override init() {
@@ -137,13 +134,7 @@ final class SubscriptionManager: NSObject, ObservableObject {
     
     // MARK: - Update Subscription Status
     private func updateSubscriptionStatus(_ customerInfo: CustomerInfo) {
-        #if DEBUG
-        if debugForceSubscribed {
-            isSubscribed = true
-            return
-        }
-        #endif
-        
+        // Security: Always verify real entitlement
         isSubscribed = customerInfo.entitlements[EntitlementID.studio]?.isActive == true
         print("📊 Subscription status: \(isSubscribed ? "Premium" : "Free")")
     }
@@ -208,13 +199,7 @@ final class SubscriptionManager: NSObject, ObservableObject {
         }
     }
     
-    // MARK: - Debug
-    #if DEBUG
-    func setDebugSubscribed(_ value: Bool) {
-        debugForceSubscribed = value
-        isSubscribed = value
-    }
-    #endif
+    // Debug functions removed for security
 }
 
 // MARK: - PurchasesDelegate

@@ -244,6 +244,8 @@ class CameraPreviewUIView: UIView {
     
     var session: AVCaptureSession? {
         didSet {
+            // Prevent re-assigning the same session which causes black flicker
+            guard session !== oldValue else { return }
             guard let session = session else { return }
             previewLayer.session = session
         }

@@ -23,62 +23,36 @@ struct HistoryView: View {
     
     var body: some View {
         NavigationStack {
-            ZStack(alignment: .top) {
-                Color.black.ignoresSafeArea()
+            ZStack {
+                Color(white: 0.06).ignoresSafeArea()
                 
-                // Main content with top padding for custom nav bar
                 VStack(spacing: 0) {
-                    Color.clear.frame(height: 60) // Spacer for nav bar
-                    
                     if generationService.isLoading && generationService.generations.isEmpty {
                         Spacer()
                         ProgressView()
                             .tint(.white)
                         Spacer()
                     } else if generationService.generations.isEmpty {
-                        Spacer()
                         emptyState
-                        Spacer()
                     } else {
                         historyGrid
                     }
                 }
-                
-                // Custom Navigation Bar
-                HStack {
-                    // Close Button
+            }
+            .navigationTitle("History")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
                     Button {
                         appState.showHistorySheet = false
                         dismiss()
                     } label: {
                         Image(systemName: "xmark")
-                            .font(.system(size: 16, weight: .semibold))
+                            .font(.system(size: 14, weight: .semibold))
                             .foregroundColor(.white.opacity(0.8))
-                            .frame(width: 40, height: 40)
-                            .background(Color.white.opacity(0.1), in: Circle())
                     }
-                    
-                    Spacer()
-                    
-                    Text("History")
-                        .font(.system(size: 17, weight: .semibold))
-                        .foregroundColor(.white)
-                    
-                    Spacer()
-                    
-                    // Invisible spacer for balance
-                    Color.clear.frame(width: 40, height: 40)
                 }
-                .padding(.horizontal, 16)
-                .padding(.top, 10)
-                .frame(height: 60)
-                .background(
-                    Color.black.opacity(0.8)
-                        .ignoresSafeArea(edges: .top)
-                        .blur(radius: 20)
-                )
             }
-            .navigationBarHidden(true)
         }
         .task {
             // Refresh history when view appears
@@ -91,6 +65,8 @@ struct HistoryView: View {
     
     private var emptyState: some View {
         VStack(spacing: 16) {
+            Spacer()
+            
             Image(systemName: "photo.stack")
                 .font(.system(size: 48))
                 .foregroundColor(.white.opacity(0.3))
@@ -114,6 +90,8 @@ struct HistoryView: View {
                     .background(.white, in: Capsule())
             }
             .padding(.top, 8)
+            
+            Spacer()
         }
     }
     
@@ -193,7 +171,7 @@ struct HistoryDetailView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color.black.ignoresSafeArea()
+                Color(white: 0.06).ignoresSafeArea()
                 
                 VStack(spacing: 20) {
                     // Image (Full res)
@@ -283,10 +261,13 @@ struct HistoryDetailView: View {
                 
                 // Done Button - Top Right
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("Done") {
+                    Button {
                         dismiss()
+                    } label: {
+                        Image(systemName: "xmark")
+                            .font(.system(size: 14, weight: .semibold))
+                            .foregroundColor(.white.opacity(0.8))
                     }
-                    .foregroundColor(.white)
                 }
             }
             .confirmationDialog("Delete this hairstyle?", isPresented: $showDeleteConfirm) {

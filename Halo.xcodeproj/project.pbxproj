@@ -39,6 +39,8 @@
 		A19D36222F0C9BA50053724B /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A19D36212F0C9BA50053724B /* StoreKit.framework */; };
 		A19D36262F0D12340053724B /* OnboardingDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A19D36252F0D12340053724B /* OnboardingDataService.swift */; };
 		A19D36282F0D12340053724B /* GenerationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A19D36272F0D12340053724B /* GenerationService.swift */; };
+		A1A646882F0D716500FD182E /* AuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1A646862F0D716500FD182E /* AuthView.swift */; };
+		A1A6468B2F0D767F00FD182E /* ProBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1A646892F0D767F00FD182E /* ProBadge.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -73,6 +75,8 @@
 		A19D36212F0C9BA50053724B /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		A19D36252F0D12340053724B /* OnboardingDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingDataService.swift; sourceTree = "<group>"; };
 		A19D36272F0D12340053724B /* GenerationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenerationService.swift; sourceTree = "<group>"; };
+		A1A646862F0D716500FD182E /* AuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthView.swift; sourceTree = "<group>"; };
+		A1A646892F0D767F00FD182E /* ProBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProBadge.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -195,6 +199,7 @@
 		A183E7212F058271009023E4 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				A1A6468A2F0D767F00FD182E /* Components */,
 				A183E7152F058271009023E4 /* Config */,
 				A183E7192F058271009023E4 /* Design */,
 				A183E71B2F058271009023E4 /* Extensions */,
@@ -256,6 +261,7 @@
 		A183E72F2F058271009023E4 /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				A1A646872F0D716500FD182E /* Auth */,
 				A19D361E2F0B36040053724B /* History */,
 				A19D36072F09B66E0053724B /* Features */,
 				A183E7242F058271009023E4 /* Camera */,
@@ -298,6 +304,22 @@
 				A19D361D2F0B36040053724B /* HistoryView.swift */,
 			);
 			path = History;
+			sourceTree = "<group>";
+		};
+		A1A646872F0D716500FD182E /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				A1A646862F0D716500FD182E /* AuthView.swift */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
+		A1A6468A2F0D767F00FD182E /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				A1A646892F0D767F00FD182E /* ProBadge.swift */,
+			);
+			path = Components;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -394,6 +416,7 @@
 				A183E7392F058271009023E4 /* OnboardingView.swift in Sources */,
 				A183E73A2F058271009023E4 /* CameraService.swift in Sources */,
 				A183E73B2F058271009023E4 /* APIConfig.swift in Sources */,
+				A1A646882F0D716500FD182E /* AuthView.swift in Sources */,
 				A183E73C2F058271009023E4 /* Extensions.swift in Sources */,
 				A183E73D2F058271009023E4 /* AppState.swift in Sources */,
 				A183E73E2F058271009023E4 /* Theme.swift in Sources */,
@@ -401,6 +424,7 @@
 				A183E7402F058271009023E4 /* ProcessingView.swift in Sources */,
 				A19D36262F0D12340053724B /* OnboardingDataService.swift in Sources */,
 				A19D36282F0D12340053724B /* GenerationService.swift in Sources */,
+				A1A6468B2F0D767F00FD182E /* ProBadge.swift in Sources */,
 				00000003 /* ContentView.swift in Sources */,
 				00000001 /* HaloApp.swift in Sources */,
 			);

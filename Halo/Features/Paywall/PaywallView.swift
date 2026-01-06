@@ -138,7 +138,7 @@ struct PaywallView: View {
                     // Close
                     Button {
                         HapticManager.shared.buttonPress()
-                        appState.navigateTo(.home)
+                        appState.navigateTo(.home)  // Go back to home (avoid showing unblurred result without payment)
                     } label: {
                         Image(systemName: "xmark")
                             .font(.system(size: 14, weight: .bold))
@@ -292,11 +292,19 @@ struct PricingMiniSheet: View {
         
         do {
             try await subscriptionManager.purchase(package)
+            // Only navigate if purchase was successful AND subscription is active
             if subscriptionManager.isSubscribed {
-                appState.navigateTo(.result)
+                HapticManager.success()
+                appState.navigateTo(.auth)  // Auth AFTER payment
+            } else {
+                // Purchase completed but subscription not active
+                subscriptionManager.errorMessage = "Purchase completed but subscription could not be activated. Please contact support."
             }
         } catch {
-            // Error handled in manager
+            // Show error to user
+            if subscriptionManager.errorMessage == nil {
+                subscriptionManager.errorMessage = "Purchase failed. Please try again."
+            }
         }
         
         isPurchasing = false

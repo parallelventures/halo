@@ -89,7 +89,6 @@ struct OnboardingView: View {
         .sheet(isPresented: $showCamera) {
             CameraView()
                 .environmentObject(appState)
-                .environmentObject(CameraService())
         }
         .sheet(isPresented: $showPaywall) {
             PaywallView()

@@ -9,12 +9,13 @@ import SwiftUI
 import Combine
 
 // MARK: - Screen Enum
-enum AppScreen: Equatable {
+enum AppScreen: String, Equatable {
     case splash
     case onboarding
     case processing
     case result
     case paywall
+    case auth  // Authentication after payment
     case home
 }
 
@@ -37,6 +38,7 @@ final class AppState: ObservableObject {
     // MARK: - UserDefaults Keys
     private enum Keys {
         static let hasCompletedOnboarding = "hasCompletedOnboarding"
+        static let lastScreen = "lastScreen"
     }
     
     // MARK: - Init
@@ -53,6 +55,27 @@ final class AppState: ObservableObject {
         // Artificial delay for splash screen
         try? await Task.sleep(nanoseconds: 2_000_000_000) // 2 seconds delay
         
+        // Restore last screen intelligently
+        if let lastScreenRaw = UserDefaults.standard.string(forKey: Keys.lastScreen),
+           let lastScreen = AppScreen(rawValue: lastScreenRaw) {
+            
+            // Only restore persistent screens, not temporary ones
+            switch lastScreen {
+            case .home, .result:
+                // These are restorable
+                navigateTo(lastScreen)
+                return
+            case .auth:
+                // If user was authenticating, go back to auth
+                navigateTo(.auth)
+                return
+            default:
+                // For splash, onboarding, processing, paywall: use normal flow
+                break
+            }
+        }
+        
+        // Default boot flow
         let destination: AppScreen = hasCompletedOnboarding ? .home : .onboarding
         navigateTo(destination)
     }
@@ -70,6 +93,9 @@ final class AppState: ObservableObject {
         withAnimation(.spring(response: 0.5, dampingFraction: 0.85)) {
             currentScreen = screen
         }
+        
+        // Save to UserDefaults for session restoration
+        UserDefaults.standard.set(screen.rawValue, forKey: Keys.lastScreen)
     }
     
     // MARK: - Image Handling

@@ -36,13 +36,12 @@ extension View {
 struct CameraView: View {
     
     @EnvironmentObject private var appState: AppState
-    @EnvironmentObject private var cameraService: CameraService
+    @StateObject private var cameraService = CameraService()
     
-    // @StateObject retiré car injecté depuis l'environnement
     @State private var showingPhotoPicker = false
     @State private var selectedPhotoItem: PhotosPickerItem?
     @State private var showStyleSheet = false
-    @State private var showInstructions = true
+    @State private var showInstructions = !UserDefaults.standard.bool(forKey: "hasSeenCameraInstructions")
 
     
     var body: some View {
@@ -66,6 +65,7 @@ struct CameraView: View {
                 HStack {
                     Button {
                         HapticManager.shared.buttonPress()
+                        cameraService.stopSession()
                         appState.showCameraSheet = false
                     } label: {
                         Image(systemName: "xmark")
@@ -212,9 +212,8 @@ struct CameraView: View {
                 cameraService.startSession()
             }
         }
-        .onDisappear {
-            cameraService.stopSession()
-        }
+
+        // onDisappear removed to prevent camera stopping when opening style sheet
     }
     
     private var ovalGuide: some View {
@@ -274,6 +273,7 @@ struct InstructionSheetView: View {
             Spacer()
             
             Button {
+                UserDefaults.standard.set(true, forKey: "hasSeenCameraInstructions")
                 showInstructions = false
             } label: {
                 Text("I'm Ready")
