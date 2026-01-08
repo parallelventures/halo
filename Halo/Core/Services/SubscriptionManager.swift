@@ -152,6 +152,14 @@ final class SubscriptionManager: NSObject, ObservableObject {
                 updateSubscriptionStatus(result.customerInfo)
                 HapticManager.success()
                 print("✅ Purchase successful!")
+                
+                // Track with TikTok SDK
+                let price = NSDecimalNumber(decimal: package.storeProduct.price).doubleValue
+                let productId = package.storeProduct.productIdentifier
+                let productName = package.storeProduct.localizedTitle
+                let planType = package.packageType == .annual ? "annual" : "monthly"
+                TikTokService.shared.trackPurchase(productId: productId, productName: productName, price: price)
+                TikTokService.shared.trackSubscribe(planType: planType, price: price)
             }
         } catch {
             HapticManager.error()

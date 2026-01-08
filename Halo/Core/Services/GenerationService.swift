@@ -104,6 +104,13 @@ class GenerationService: ObservableObject {
             
             print("✅ Generation created: \(generationId)")
             
+            // Track with TikTok SDK
+            TikTokService.shared.trackStyleSelected(
+                styleId: generationId.uuidString,
+                styleName: styleName,
+                category: styleCategory
+            )
+            
             // Return the created generation
             return Generation(
                 id: generationId,

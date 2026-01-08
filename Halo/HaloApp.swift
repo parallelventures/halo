@@ -21,6 +21,9 @@ struct HaloApp: App {
     init() {
         // Configure RevenueCat
         SubscriptionManager.shared.configure()
+        
+        // Configure TikTok SDK
+        TikTokService.shared.configure()
     }
     
     // MARK: - Body
@@ -36,6 +39,12 @@ struct HaloApp: App {
                     GIDSignIn.sharedInstance.handle(url)
                 }
                 .task {
+                    // Request App Tracking Transparency permission FIRST (required by TikTok SDK)
+                    _ = await TikTokService.shared.requestTrackingPermission()
+                    
+                    // Track app launch
+                    TikTokService.shared.trackAppLaunch()
+                    
                     // Refresh session if user was previously authenticated
                     if AuthService.shared.isAuthenticated {
                         _ = await AuthService.shared.refreshSession()

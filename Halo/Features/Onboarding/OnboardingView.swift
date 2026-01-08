@@ -35,12 +35,12 @@ struct StylePreference: Identifiable {
 
 extension StylePreference {
     static let menStyles: [StylePreference] = [
-        StylePreference(name: "Textured Crop", icon: "scissors", image: nil),
-        StylePreference(name: "Low Fade", icon: "square.split.diagonal", image: nil),
-        StylePreference(name: "Natural Flow", icon: "wind", image: nil),
-        StylePreference(name: "Side Part", icon: "arrow.left.and.right", image: nil),
-        StylePreference(name: "Modern Slick Back", icon: "arrow.up", image: nil),
-        StylePreference(name: "Clean Cut", icon: "checkmark.circle", image: nil),
+        StylePreference(name: "Textured Crop", icon: "scissors", image: "textured-crop"),
+        StylePreference(name: "Low Fade", icon: "square.split.diagonal", image: "low-fade"),
+        StylePreference(name: "Natural Flow", icon: "wind", image: "natural-flow"),
+        StylePreference(name: "Classic Side Part", icon: "arrow.left.and.right", image: "classic-side-part"),
+        StylePreference(name: "Modern Slick Back", icon: "arrow.up", image: "modern-slick-back"),
+        StylePreference(name: "Clean Cut", icon: "checkmark.circle", image: "clean-cut"),
     ]
     
     static let womenStyles: [StylePreference] = [
@@ -106,6 +106,18 @@ struct OnboardingView: View {
                 Task {
                     await processImage()
                 }
+            }
+        }
+        .onAppear {
+            // If user is coming back from paywall and has already selected styles, go to "Styles Ready"
+            let savedStyles = OnboardingDataService.shared.getLikedStyles()
+            if !savedStyles.isEmpty {
+                // Restore category
+                if let categoryString = OnboardingDataService.shared.localData.styleCategory {
+                    selectedCategory = StyleCategory(rawValue: categoryString.capitalized)
+                }
+                // Go directly to intention view (which will show "Styles Ready")
+                currentStep = .intention
             }
         }
     }
@@ -193,7 +205,9 @@ struct OnboardingView: View {
     // MARK: - VIEW 2: Intention (Swipe Cards)
     private var intentionView: some View {
         let styles = selectedCategory == .women ? StylePreference.womenStyles : StylePreference.menStyles
-        let isFinished = currentCardIndex >= styles.count
+        // Check if already finished (cards swiped) OR if coming back from paywall with saved styles
+        let hasStoredStyles = !OnboardingDataService.shared.getLikedStyles().isEmpty
+        let isFinished = currentCardIndex >= styles.count || hasStoredStyles
         
         return VStack(spacing: 0) {
             if isFinished {

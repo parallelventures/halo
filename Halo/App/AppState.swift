@@ -83,6 +83,10 @@ final class AppState: ObservableObject {
     func completeOnboarding() {
         hasCompletedOnboarding = true
         UserDefaults.standard.set(true, forKey: Keys.hasCompletedOnboarding)
+        
+        // Track onboarding completion with TikTok
+        TikTokService.shared.trackCompleteTutorial()
+        
         navigateTo(.home)
         showCameraSheet = true
     }

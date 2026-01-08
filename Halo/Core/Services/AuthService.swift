@@ -142,6 +142,11 @@ final class AuthService: NSObject, ObservableObject {
             await OnboardingDataService.shared.syncToSupabase()
         }
         
+        // Track with TikTok SDK
+        let email = (user["email"] as? String)
+        TikTokService.shared.identifyUser(userId: userId, email: email)
+        TikTokService.shared.trackRegistration(method: "apple")
+        
         authState = .authenticated(userId: userId)
     }
     

@@ -41,6 +41,8 @@
 		A19D36282F0D12340053724B /* GenerationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A19D36272F0D12340053724B /* GenerationService.swift */; };
 		A1A646882F0D716500FD182E /* AuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1A646862F0D716500FD182E /* AuthView.swift */; };
 		A1A6468B2F0D767F00FD182E /* ProBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1A646892F0D767F00FD182E /* ProBadge.swift */; };
+		A1A6468E2F0FD9C400FD182E /* TikTokBusinessSDK in Frameworks */ = {isa = PBXBuildFile; productRef = A1A6468D2F0FD9C400FD182E /* TikTokBusinessSDK */; };
+		A1A646902F0FF0C800FD182E /* TikTokService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1A6468F2F0FF0C800FD182E /* TikTokService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -77,6 +79,7 @@
 		A19D36272F0D12340053724B /* GenerationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenerationService.swift; sourceTree = "<group>"; };
 		A1A646862F0D716500FD182E /* AuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthView.swift; sourceTree = "<group>"; };
 		A1A646892F0D767F00FD182E /* ProBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProBadge.swift; sourceTree = "<group>"; };
+		A1A6468F2F0FF0C800FD182E /* TikTokService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TikTokService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -89,6 +92,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A19D360C2F09BBEF0053724B /* GoogleSignIn in Frameworks */,
+				A1A6468E2F0FD9C400FD182E /* TikTokBusinessSDK in Frameworks */,
 				A19D360E2F09BBEF0053724B /* GoogleSignInSwift in Frameworks */,
 				A19D36122F0AAA560053724B /* RevenueCat in Frameworks */,
 				A19D36222F0C9BA50053724B /* StoreKit.framework in Frameworks */,
@@ -187,6 +191,7 @@
 		A183E7202F058271009023E4 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				A1A6468F2F0FF0C800FD182E /* TikTokService.swift */,
 				A19D36002F09B6350053724B /* SupabaseService.swift */,
 				A19D36022F09B63B0053724B /* AuthService.swift */,
 				A183E71F2F058271009023E4 /* SubscriptionManager.swift */,
@@ -372,6 +377,7 @@
 			packageReferences = (
 				A19D360A2F09BBEF0053724B /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 				A19D360F2F0A97AA0053724B /* XCRemoteSwiftPackageReference "purchases-ios" */,
+				A1A6468C2F0FD9C400FD182E /* XCRemoteSwiftPackageReference "tiktok-business-ios-sdk" */,
 			);
 			productRefGroup = 0000000D /* Products */;
 			projectDirPath = "";
@@ -421,6 +427,7 @@
 				A183E73D2F058271009023E4 /* AppState.swift in Sources */,
 				A183E73E2F058271009023E4 /* Theme.swift in Sources */,
 				A183E73F2F058271009023E4 /* ResultView.swift in Sources */,
+				A1A646902F0FF0C800FD182E /* TikTokService.swift in Sources */,
 				A183E7402F058271009023E4 /* ProcessingView.swift in Sources */,
 				A19D36262F0D12340053724B /* OnboardingDataService.swift in Sources */,
 				A19D36282F0D12340053724B /* GenerationService.swift in Sources */,
@@ -670,6 +677,14 @@
 				minimumVersion = 5.52.1;
 			};
 		};
+		A1A6468C2F0FD9C400FD182E /* XCRemoteSwiftPackageReference "tiktok-business-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/tiktok/tiktok-business-ios-sdk";
+			requirement = {
+				kind = exactVersion;
+				version = 1.5.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -687,6 +702,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = A19D360F2F0A97AA0053724B /* XCRemoteSwiftPackageReference "purchases-ios" */;
 			productName = RevenueCat;
+		};
+		A1A6468D2F0FD9C400FD182E /* TikTokBusinessSDK */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A1A6468C2F0FD9C400FD182E /* XCRemoteSwiftPackageReference "tiktok-business-ios-sdk" */;
+			productName = TikTokBusinessSDK;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

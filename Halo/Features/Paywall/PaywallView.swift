@@ -15,6 +15,31 @@ struct PaywallView: View {
     
     @State private var showPricingSheet = false
     
+    // Get user's selected styles from onboarding
+    private var selectedStyleImages: [String] {
+        let onboardingData = OnboardingDataService.shared
+        let category = onboardingData.localData.styleCategory
+        let likedStyleNames = onboardingData.getLikedStyles()
+        
+        // Map style names to image asset names
+        let allStyles = category == "women" ? StylePreference.womenStyles : StylePreference.menStyles
+        
+        // Find images for liked styles
+        var images: [String] = []
+        for styleName in likedStyleNames {
+            if let style = allStyles.first(where: { $0.name == styleName }), let imageName = style.image {
+                images.append(imageName)
+            }
+        }
+        
+        // Fallback: if no liked styles, use first 3 from category
+        if images.isEmpty {
+            images = allStyles.prefix(3).compactMap { $0.image }
+        }
+        
+        return Array(images.prefix(3))
+    }
+    
     // Device detection
     private var isIPad: Bool { UIDevice.current.userInterfaceIdiom == .pad }
     private var isLargePhone: Bool { UIScreen.main.bounds.height >= 800 }
@@ -79,35 +104,52 @@ struct PaywallView: View {
                 }
                 .padding(.horizontal, 20)
                 
-                // Stacked selfies preview
+                // Stacked style cards preview (user's selected styles)
                 ZStack {
-                    // Selfie 1 (back)
-                    Image("pw-selfie1")
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: imageSize, height: imageHeight)
-                        .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
-                        .rotationEffect(.degrees(-10))
-                        .offset(x: -imageOffset, y: 15)
-                        .shadow(color: .black.opacity(0.3), radius: 12, y: 6)
+                    let images = selectedStyleImages
+                    let count = images.count
                     
-                    // Selfie 2 (middle)
-                    Image("pw-selfie2")
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: imageSize, height: imageHeight)
-                        .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
-                        .rotationEffect(.degrees(8))
-                        .offset(x: imageOffset, y: 10)
-                        .shadow(color: .black.opacity(0.3), radius: 12, y: 6)
+                    if count >= 1 {
+                        // Card 1 (back left)
+                        Image(images[0])
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: imageSize, height: imageHeight)
+                            .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
+                            .rotationEffect(.degrees(-10))
+                            .offset(x: -imageOffset, y: 15)
+                            .shadow(color: .black.opacity(0.3), radius: 12, y: 6)
+                    }
                     
-                    // Selfie 3 (front)
-                    Image("pw-selfie3")
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: imageSizeLarge, height: imageHeightLarge)
-                        .clipShape(RoundedRectangle(cornerRadius: 28, style: .continuous))
-                        .shadow(color: .black.opacity(0.4), radius: 18, y: 12)
+                    if count >= 2 {
+                        // Card 2 (back right)
+                        Image(images[1])
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: imageSize, height: imageHeight)
+                            .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
+                            .rotationEffect(.degrees(8))
+                            .offset(x: imageOffset, y: 10)
+                            .shadow(color: .black.opacity(0.3), radius: 12, y: 6)
+                    }
+                    
+                    if count >= 3 {
+                        // Card 3 (front center)
+                        Image(images[2])
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: imageSizeLarge, height: imageHeightLarge)
+                            .clipShape(RoundedRectangle(cornerRadius: 28, style: .continuous))
+                            .shadow(color: .black.opacity(0.4), radius: 18, y: 12)
+                    } else if count >= 1 {
+                        // If only 1 or 2 images, use first as center
+                        Image(images[0])
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: imageSizeLarge, height: imageHeightLarge)
+                            .clipShape(RoundedRectangle(cornerRadius: 28, style: .continuous))
+                            .shadow(color: .black.opacity(0.4), radius: 18, y: 12)
+                    }
                 }
                 .frame(height: stackHeight)
                 
@@ -135,10 +177,10 @@ struct PaywallView: View {
                     
                     Spacer()
                     
-                    // Close
+                    // Close - Returns to onboarding (styles ready) without granting access
                     Button {
                         HapticManager.shared.buttonPress()
-                        appState.navigateTo(.home)  // Go back to home (avoid showing unblurred result without payment)
+                        appState.navigateTo(.onboarding)  // Go back to styles ready - no access without payment
                     } label: {
                         Image(systemName: "xmark")
                             .font(.system(size: 14, weight: .bold))
@@ -160,6 +202,8 @@ struct PaywallView: View {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 showPricingSheet = true
             }
+            // Track paywall viewed with TikTok
+            TikTokService.shared.trackPaywallViewed(source: "onboarding")
         }
         .sheet(isPresented: $showPricingSheet) {
             PricingMiniSheet()

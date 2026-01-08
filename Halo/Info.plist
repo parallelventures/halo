@@ -75,5 +75,9 @@
     <array>
         <string>Agrandir Narrow Bold.otf</string>
     </array>
+    
+    <!-- App Tracking Transparency (ATT) - Required for TikTok SDK -->
+    <key>NSUserTrackingUsageDescription</key>
+    <string>Halo uses tracking to measure ad performance and provide personalized content.</string>
 </dict>
 </plist>
