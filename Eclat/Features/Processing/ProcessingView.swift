@@ -26,6 +26,7 @@ struct ProcessingView: View {
     @State private var errorMessage: String = ""
     @State private var needsSignIn = false
     @State private var navigateToResult = false
+    @State private var showAIConsentAlert = false
     
     // Dynamic Phases (Emotional progression)
     private let phases = [
@@ -158,7 +159,18 @@ struct ProcessingView: View {
             }
         }
         .onAppear {
-            startExperience()
+            checkAIConsentAndStart()
+        }
+        .alert("AI Processing Consent", isPresented: $showAIConsentAlert) {
+            Button("I Agree") {
+                UserDefaults.standard.set(true, forKey: "has_accepted_ai_consent")
+                startExperience()
+            }
+            Button("Cancel", role: .cancel) {
+                appState.navigateTo(.home)
+            }
+        } message: {
+            Text("To generate your hairstyle preview, your selfie photo will be securely sent to Google (Gemini AI) for processing. Google processes the image in real-time and does not retain your face data.\n\nNo face data is used for advertising or shared with other parties. You can delete your photos at any time.\n\nBy tapping \"I Agree\", you consent to this processing.")
         }
         .onChange(of: navigateToResult) { _, shouldNavigate in
             if shouldNavigate {
@@ -181,6 +193,16 @@ struct ProcessingView: View {
     }
     
     // MARK: - Logic
+    
+    // MARK: - AI Consent Check
+    private func checkAIConsentAndStart() {
+        let hasConsented = UserDefaults.standard.bool(forKey: "has_accepted_ai_consent")
+        if hasConsented || isSimulation || appState.isSimulationMode {
+            startExperience()
+        } else {
+            showAIConsentAlert = true
+        }
+    }
     
     private func startExperience() {
         // Start breathing animation
