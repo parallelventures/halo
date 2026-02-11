@@ -1,4 +1,4 @@
-# 🌟 Halo - AI Hairstyle Try-On
+# ✨ Eclat: Preview your look
 
 An iOS app that lets users try on different hairstyles using AI-powered image generation.
 
@@ -14,8 +14,8 @@ An iOS app that lets users try on different hairstyles using AI-powered image ge
 ## 🏗️ Architecture
 
 ```
-Halo/
-├── HaloApp.swift              # App entry point
+Eclat/
+├── EclatApp.swift             # App entry point
 ├── ContentView.swift          # Root content view
 ├── Info.plist                 # App configuration
 │
@@ -75,8 +75,8 @@ Halo/
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/halo-ios.git
-   cd halo-ios
+   git clone https://github.com/yourusername/eclat-ios.git
+   cd eclat-ios
    ```
 
 2. **Configure API Key**
@@ -93,7 +93,7 @@ Halo/
 
 3. **Open in Xcode**
    ```bash
-   open Halo.xcodeproj
+   open Eclat.xcodeproj
    ```
 
 4. **Configure Signing**
@@ -119,15 +119,15 @@ Halo/
 
 ### Animations
 - Spring animations with bezier curves
-- Custom `haloSpring`, `haloEaseOut`, `haloBack`
+- Custom `eclatSpring`, `eclatEaseOut`, `eclatSmooth`
 - Haptic feedback on interactions
 
 ## 💰 Subscription Setup
 
 1. **App Store Connect**
    - Create subscription products:
-     - `com.halo.subscription.monthly` - $19.99/month
-     - `com.halo.subscription.annual` - $69.99/year
+     - `com.eclat.subscription.monthly` - $19.99/month
+     - `com.eclat.subscription.annual` - $69.99/year
 
 2. **Update Product IDs**
    - Edit `SubscriptionProduct` enum in `SubscriptionManager.swift`

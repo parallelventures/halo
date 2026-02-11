@@ -154,7 +154,7 @@ CREATE INDEX IF NOT EXISTS idx_user_profiles_user_id ON user_profiles(user_id);
 CREATE OR REPLACE FUNCTION increment_generation_count()
 RETURNS TRIGGER AS $$
 BEGIN
-    UPDATE user_profiles
+    UPDATE public.user_profiles
     SET 
         total_generations = total_generations + 1,
         generations_this_month = generations_this_month + 1,
@@ -162,7 +162,7 @@ BEGIN
     WHERE user_id = NEW.user_id;
     RETURN NEW;
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+$$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public;
 
 -- Trigger to auto-increment on new generation
 DROP TRIGGER IF EXISTS on_generation_created ON generations;
@@ -176,11 +176,11 @@ CREATE TRIGGER on_generation_created
 CREATE OR REPLACE FUNCTION handle_new_user()
 RETURNS TRIGGER AS $$
 BEGIN
-    INSERT INTO user_profiles (user_id, display_name)
+    INSERT INTO public.user_profiles (user_id, display_name)
     VALUES (NEW.id, COALESCE(NEW.raw_user_meta_data->>'name', NEW.email));
     RETURN NEW;
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+$$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public;
 
 -- Trigger to auto-create profile on signup
 DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
@@ -194,18 +194,23 @@ CREATE TRIGGER on_auth_user_created
 CREATE OR REPLACE FUNCTION reset_monthly_generations()
 RETURNS void AS $$
 BEGIN
-    UPDATE user_profiles
+    UPDATE public.user_profiles
     SET generations_this_month = 0, updated_at = NOW();
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+$$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public;
 
 
 -- ============================================
 -- 6. VIEWS (Optional - for easier queries)
 -- ============================================
 
+-- Drop existing view to recreate with proper security
+DROP VIEW IF EXISTS user_generation_history;
+
 -- View for user's generation history
-CREATE OR REPLACE VIEW user_generation_history AS
+-- Using SECURITY INVOKER (default in newer Postgres) to respect RLS policies
+CREATE VIEW user_generation_history 
+WITH (security_invoker = true) AS
 SELECT 
     g.id,
     g.user_id,
@@ -219,3 +224,6 @@ SELECT
 FROM generations g
 LEFT JOIN user_profiles p ON g.user_id = p.user_id
 WHERE g.is_deleted = FALSE AND g.status = 'completed';
+
+-- Grant access to authenticated users (RLS on underlying tables will still apply)
+GRANT SELECT ON user_generation_history TO authenticated;

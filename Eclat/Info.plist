@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleDevelopmentRegion</key>
+    <string>$(DEVELOPMENT_LANGUAGE)</string>
+    <key>CFBundleExecutable</key>
+    <string>$(EXECUTABLE_NAME)</string>
+    <key>CFBundleIdentifier</key>
+    <string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+    <key>CFBundleInfoDictionaryVersion</key>
+    <string>6.0</string>
+    <key>CFBundleName</key>
+    <string>$(PRODUCT_NAME)</string>
+    <key>CFBundlePackageType</key>
+    <string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
+    <key>CFBundleShortVersionString</key>
+    <string>$(MARKETING_VERSION)</string>
+    <key>CFBundleVersion</key>
+    <string>$(CURRENT_PROJECT_VERSION)</string>
+    <key>LSRequiresIPhoneOS</key>
+    <true/>
+    <key>UIApplicationSceneManifest</key>
+    <dict>
+        <key>UIApplicationSupportsMultipleScenes</key>
+        <false/>
+    </dict>
+    <key>UILaunchScreen</key>
+    <dict>
+        <key>UIColorName</key>
+        <string>LaunchBackground</string>
+        <key>UIImageName</key>
+        <string>LaunchLogo</string>
+    </dict>
+    <key>UISupportedInterfaceOrientations</key>
+    <array>
+        <string>UIInterfaceOrientationPortrait</string>
+    </array>
+
+    <key>UIRequiredDeviceCapabilities</key>
+    <array>
+        <string>arm64</string>
+    </array>
+    <key>ITSAppUsesNonExemptEncryption</key>
+    <false/>
+    
+    <!-- Google Sign-In -->
+    <key>GIDClientID</key>
+    <string>126464764366-e983cl29jjbsj1ch57f77trh0tcucivs.apps.googleusercontent.com</string>
+    
+    <!-- URL Schemes for Google Sign-In and Deep Links -->
+    <key>CFBundleURLTypes</key>
+    <array>
+        <dict>
+            <key>CFBundleURLSchemes</key>
+            <array>
+                <string>com.googleusercontent.apps.126464764366-e983cl29jjbsj1ch57f77trh0tcucivs</string>
+            </array>
+            <key>CFBundleURLName</key>
+            <string>google-signin</string>
+        </dict>
+        <dict>
+            <key>CFBundleURLSchemes</key>
+            <array>
+                <string>eclat</string>
+            </array>
+            <key>CFBundleURLName</key>
+            <string>eu.parallelventures.eclat</string>
+        </dict>
+    </array>
+    
+    <!-- Camera Permission -->
+    <key>NSCameraUsageDescription</key>
+    <string>Eclat needs camera access to take selfies for AI hairstyle try-on</string>
+    
+    <!-- Photo Library Permission -->
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>Eclat needs photo library access to save your generated hairstyles</string>
+    
+    <!-- Microphone Permission (for Intercom video support) -->
+    <key>NSMicrophoneUsageDescription</key>
+    <string>Eclat needs microphone access to record videos for customer support</string>
+
+    <!-- Custom Fonts -->
+    <key>UIAppFonts</key>
+    <array>
+        <string>GT-Alpina-Condensed-Thin.otf</string>
+        <string>GT-Alpina-Standard-Regular-Trial.otf</string>
+        <string>InstrumentSerif-Regular.ttf</string>
+    </array>
+    
+    <!-- App Tracking Transparency (ATT) - Required for TikTok SDK -->
+    <key>NSUserTrackingUsageDescription</key>
+    <string>Eclat uses tracking to measure ad performance and provide personalized content.</string>
+</dict>
+</plist>

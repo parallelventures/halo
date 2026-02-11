@@ -1,6 +1,6 @@
 # Supabase Setup Guide
 
-This folder contains the Supabase Edge Functions for the Halo app.
+This folder contains the Supabase Edge Functions for the Eclat app.
 
 ## Prerequisites
 
@@ -36,7 +36,7 @@ supabase functions deploy generate-hairstyle
 
 ## iOS App Configuration
 
-Update `SupabaseConfig` in `Halo/Core/Network/GeminiAPI.swift`:
+Update `SupabaseConfig` in `Eclat/Core/Network/GeminiAPI.swift`:
 
 ```swift
 enum SupabaseConfig {

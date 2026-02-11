@@ -97,11 +97,11 @@ CREATE OR REPLACE FUNCTION upsert_user_preference(
 )
 RETURNS void AS $$
 BEGIN
-    INSERT INTO user_preferences (user_id, style_category)
+    INSERT INTO public.user_preferences (user_id, style_category)
     VALUES (p_user_id, p_style_category)
     ON CONFLICT (user_id) 
     DO UPDATE SET 
         style_category = p_style_category,
         updated_at = NOW();
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+$$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public;
