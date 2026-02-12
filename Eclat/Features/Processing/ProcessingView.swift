@@ -197,14 +197,46 @@ struct ProcessingView: View {
     
     // MARK: - Logic
     
-    // MARK: - AI Consent Check
+    // MARK: - AI Consent Check (Remote-configurable)
     private func checkAIConsentAndStart() {
         let hasConsented = UserDefaults.standard.bool(forKey: "has_accepted_ai_consent")
         if hasConsented || isSimulation || appState.isSimulationMode {
             startExperience()
-        } else {
-            showAIConsentSheet = true
+            return
         }
+        
+        // Check remote config to see if consent sheet is enabled
+        Task {
+            let shouldShowConsent = await fetchConsentFlag()
+            await MainActor.run {
+                if shouldShowConsent {
+                    showAIConsentSheet = true
+                } else {
+                    startExperience()
+                }
+            }
+        }
+    }
+    
+    /// Fetch remote flag from Supabase app_config table
+    /// Defaults to true (show consent) if fetch fails — safe for Apple review
+    private func fetchConsentFlag() async -> Bool {
+        do {
+            let response = try await SupabaseService.shared.client
+                .from("app_config")
+                .select("value")
+                .eq("key", value: "show_ai_consent")
+                .single()
+                .execute()
+            
+            let json = try JSONSerialization.jsonObject(with: response.data) as? [String: Any]
+            if let value = json?["value"] as? String {
+                return value == "true"
+            }
+        } catch {
+            print("⚠️ Failed to fetch consent flag, defaulting to show: \(error)")
+        }
+        return true // Default: show consent (safe for review)
     }
     
     private func startExperience() {
