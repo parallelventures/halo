@@ -68,6 +68,7 @@
 		A1A6468B2F0D767F00FD182E /* ProBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1A646892F0D767F00FD182E /* ProBadge.swift */; };
 		A1A6468E2F0FD9C400FD182E /* TikTokBusinessSDK in Frameworks */ = {isa = PBXBuildFile; productRef = A1A6468D2F0FD9C400FD182E /* TikTokBusinessSDK */; };
 		A1A646902F0FF0C800FD182E /* TikTokService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1A6468F2F0FF0C800FD182E /* TikTokService.swift */; };
+		A1B1C8DD2F3DCAF2001ED680 /* AIConsentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B1C8DC2F3DCAF2001ED680 /* AIConsentView.swift */; };
 		A1F3FE272F1C97760062B9FD /* CreditsPaywallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1F3FE262F1C97760062B9FD /* CreditsPaywallView.swift */; };
 		A1F3FE292F1CC1190062B9FD /* OutOfLooksSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1F3FE282F1CC1190062B9FD /* OutOfLooksSheet.swift */; };
 		A1F3FE2B2F1CC13B0062B9FD /* AuroraButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1F3FE2A2F1CC13B0062B9FD /* AuroraButton.swift */; };
@@ -178,6 +179,7 @@
 		A1A646862F0D716500FD182E /* AuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthView.swift; sourceTree = "<group>"; };
 		A1A646892F0D767F00FD182E /* ProBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProBadge.swift; sourceTree = "<group>"; };
 		A1A6468F2F0FF0C800FD182E /* TikTokService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TikTokService.swift; sourceTree = "<group>"; };
+		A1B1C8DC2F3DCAF2001ED680 /* AIConsentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIConsentView.swift; sourceTree = "<group>"; };
 		A1F3FE262F1C97760062B9FD /* CreditsPaywallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditsPaywallView.swift; sourceTree = "<group>"; };
 		A1F3FE282F1CC1190062B9FD /* OutOfLooksSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutOfLooksSheet.swift; sourceTree = "<group>"; };
 		A1F3FE2A2F1CC13B0062B9FD /* AuroraButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuroraButton.swift; sourceTree = "<group>"; };
@@ -396,6 +398,7 @@
 		A183E72C2F058271009023E4 /* Processing */ = {
 			isa = PBXGroup;
 			children = (
+				A1B1C8DC2F3DCAF2001ED680 /* AIConsentView.swift */,
 				A183E72B2F058271009023E4 /* ProcessingView.swift */,
 			);
 			path = Processing;
@@ -984,6 +987,7 @@
 				A1F3FE272F1C97760062B9FD /* CreditsPaywallView.swift in Sources */,
 				A183E73F2F058271009023E4 /* ResultView.swift in Sources */,
 				A1241A622F34AC0300872294 /* CreatorModeSection.swift in Sources */,
+				A1B1C8DD2F3DCAF2001ED680 /* AIConsentView.swift in Sources */,
 				A1A646902F0FF0C800FD182E /* TikTokService.swift in Sources */,
 				A149A4E22F173E5B00AA7557 /* NanoBananaPrompts.swift in Sources */,
 				A1F3FE292F1CC1190062B9FD /* OutOfLooksSheet.swift in Sources */,

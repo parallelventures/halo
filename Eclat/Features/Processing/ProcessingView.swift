@@ -26,7 +26,7 @@ struct ProcessingView: View {
     @State private var errorMessage: String = ""
     @State private var needsSignIn = false
     @State private var navigateToResult = false
-    @State private var showAIConsentSheet = false
+    @State private var showAIConsent = false
     
     // Dynamic Phases (Emotional progression)
     private let phases = [
@@ -41,6 +41,23 @@ struct ProcessingView: View {
             // Background
             Color(hex: "0B0606")
                 .ignoresSafeArea()
+            
+            // MARK: - AI Consent Overlay (full screen, above everything)
+            if showAIConsent {
+                AIConsentView(
+                    onAccept: {
+                        UserDefaults.standard.set(true, forKey: "has_accepted_ai_consent")
+                        withAnimation { showAIConsent = false }
+                        startExperience()
+                    },
+                    onDecline: {
+                        withAnimation { showAIConsent = false }
+                        appState.navigateTo(.home)
+                    }
+                )
+                .transition(.opacity)
+                .zIndex(100)
+            }
             
             VStack(spacing: 0) {
                 Spacer()
@@ -161,20 +178,7 @@ struct ProcessingView: View {
         .onAppear {
             checkAIConsentAndStart()
         }
-        .sheet(isPresented: $showAIConsentSheet) {
-            AIConsentView(
-                onAccept: {
-                    UserDefaults.standard.set(true, forKey: "has_accepted_ai_consent")
-                    showAIConsentSheet = false
-                    startExperience()
-                },
-                onDecline: {
-                    showAIConsentSheet = false
-                    appState.navigateTo(.home)
-                }
-            )
-            .interactiveDismissDisabled(true)
-        }
+
         .onChange(of: navigateToResult) { _, shouldNavigate in
             if shouldNavigate {
                 appState.navigateTo(.result)
@@ -205,12 +209,12 @@ struct ProcessingView: View {
             return
         }
         
-        // Check remote config to see if consent sheet is enabled
+        // Check remote config — if table doesn't exist, defaults to showing consent
         Task {
-            let shouldShowConsent = await fetchConsentFlag()
+            let shouldShow = await fetchConsentFlag()
             await MainActor.run {
-                if shouldShowConsent {
-                    showAIConsentSheet = true
+                if shouldShow {
+                    withAnimation { showAIConsent = true }
                 } else {
                     startExperience()
                 }
