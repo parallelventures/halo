@@ -88,9 +88,5 @@
         <string>GT-Alpina-Standard-Regular-Trial.otf</string>
         <string>InstrumentSerif-Regular.ttf</string>
     </array>
-    
-    <!-- App Tracking Transparency (ATT) - Required for TikTok SDK -->
-    <key>NSUserTrackingUsageDescription</key>
-    <string>Eclat uses tracking to measure ad performance and provide personalized content.</string>
 </dict>
 </plist>

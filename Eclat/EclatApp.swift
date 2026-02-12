@@ -8,7 +8,7 @@
 import SwiftUI
 import GoogleSignIn
 import RevenueCat
-import AppTrackingTransparency
+
 
 @main
 struct EclatApp: App {
@@ -52,17 +52,7 @@ struct EclatApp: App {
                     }
                 }
                 .task {
-                    // ⚠️ ATT: Must wait for scene to be fully visible on iOS 17+
-                    // Otherwise the system silently suppresses the popup
-                    try? await Task.sleep(nanoseconds: 1_000_000_000) // 1 second delay
-                    
-                    // Only request if not yet determined (avoid re-prompting)
-                    let currentStatus = ATTrackingManager.trackingAuthorizationStatus
-                    if currentStatus == .notDetermined {
-                        _ = await TikTokService.shared.requestTrackingPermission()
-                    }
-                    
-                    // Track app launch after ATT decision
+                    // Track app launch
                     TikTokService.shared.trackAppLaunch()
                     
                     // Refresh session if user was previously authenticated

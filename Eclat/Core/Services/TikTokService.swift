@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import AppTrackingTransparency
 import TikTokBusinessSDK
 
 final class TikTokService {
@@ -33,16 +32,6 @@ final class TikTokService {
             TikTokBusiness.initializeSdk(config)
             isInitialized = true
             print("✅ TikTok SDK initialized")
-        }
-    }
-    
-    // MARK: - Request Tracking Permission (ATT)
-    /// Request App Tracking Transparency authorization
-    func requestTrackingPermission() async -> ATTrackingManager.AuthorizationStatus {
-        await withCheckedContinuation { continuation in
-            ATTrackingManager.requestTrackingAuthorization { status in
-                continuation.resume(returning: status)
-            }
         }
     }
     

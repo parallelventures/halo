@@ -53,7 +53,7 @@ struct CameraView: View {
     @State private var selectedPhotoItem: PhotosPickerItem?
     @State private var pendingPhotoItem: PhotosPickerItem?
     @State private var showStyleSheet = false
-    @State private var showInstructions = false
+
     
     // Camera Experience State
     @State private var faceState: FaceState = .searching
@@ -130,26 +130,8 @@ struct CameraView: View {
                 Task { await loadPhoto(pending) }
             }
         }
-        .sheet(isPresented: $showInstructions) {
-            InstructionSheetView(showInstructions: $showInstructions)
-                .presentationDetents([.fraction(0.4), .medium])
-                .presentationDragIndicator(.visible)
-                .presentationBackground {
-                    if #available(iOS 26.0, *) {
-                        Rectangle()
-                            .fill(.clear)
-                            .glassEffect(.regular, in: Rectangle())
-                    } else {
-                        Rectangle()
-                            .fill(.ultraThinMaterial)
-                    }
-                }
-                .interactiveDismissDisabled(false)
-        }
+
         .onAppear {
-            if !UserDefaults.standard.bool(forKey: "hasSeenCameraInstructions") {
-                showInstructions = true
-            }
             TikTokService.shared.trackCameraOpened()
             Task {
                 await cameraService.checkAuthorization()
@@ -595,65 +577,7 @@ struct MagneticButtonStyle: ButtonStyle {
     }
 }
 
-// MARK: - Instruction Sheet Content
-struct InstructionSheetView: View {
-    @Binding var showInstructions: Bool
-    
-    var body: some View {
-        VStack(spacing: 24) {
-            Text("How to get the best result")
-                .font(.title3.bold())
-                .padding(.top, 24)
-            
-            HStack(spacing: 30) {
-                InstructionItem(icon: "slider.horizontal.3", title: "Choose Style", subtitle: "Pick a look first")
-                InstructionItem(icon: "face.smiling", title: "Face Forward", subtitle: "No glasses")
-                InstructionItem(icon: "sun.max.fill", title: "Good Light", subtitle: "Avoid shadows")
-            }
-            
-            Spacer()
-            
-            Button {
-                UserDefaults.standard.set(true, forKey: "hasSeenCameraInstructions")
-                showInstructions = false
-            } label: {
-                Text("I'm Ready")
-                    .font(.headline)
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 50)
-                    .background(Color.black, in: Capsule())
-            }
-            .padding(.horizontal, 24)
-            .padding(.bottom, 16)
-        }
-    }
-}
 
-struct InstructionItem: View {
-    let icon: String
-    let title: String
-    let subtitle: String
-    
-    var body: some View {
-        VStack(spacing: 8) {
-            Image(systemName: icon)
-                .font(.title2)
-                .frame(width: 50, height: 50)
-                .background(Color.secondary.opacity(0.1), in: Circle())
-            
-            VStack(spacing: 2) {
-                Text(title)
-                    .font(.caption.bold())
-                Text(subtitle)
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                    .multilineTextAlignment(.center)
-            }
-        }
-        .frame(maxWidth: .infinity)
-    }
-}
 
 // MARK: - Style Picker Sheet
 struct StylePickerSheet: View {
