@@ -26,7 +26,6 @@ struct ProcessingView: View {
     @State private var errorMessage: String = ""
     @State private var needsSignIn = false
     @State private var navigateToResult = false
-    @State private var showAIConsent = false
     
     // Dynamic Phases (Emotional progression)
     private let phases = [
@@ -41,23 +40,6 @@ struct ProcessingView: View {
             // Background
             Color(hex: "0B0606")
                 .ignoresSafeArea()
-            
-            // MARK: - AI Consent Overlay (full screen, above everything)
-            if showAIConsent {
-                AIConsentView(
-                    onAccept: {
-                        UserDefaults.standard.set(true, forKey: "has_accepted_ai_consent")
-                        withAnimation { showAIConsent = false }
-                        startExperience()
-                    },
-                    onDecline: {
-                        withAnimation { showAIConsent = false }
-                        appState.navigateTo(.home)
-                    }
-                )
-                .transition(.opacity)
-                .zIndex(100)
-            }
             
             VStack(spacing: 0) {
                 Spacer()
@@ -176,9 +158,8 @@ struct ProcessingView: View {
             }
         }
         .onAppear {
-            checkAIConsentAndStart()
+            startExperience()
         }
-
         .onChange(of: navigateToResult) { _, shouldNavigate in
             if shouldNavigate {
                 appState.navigateTo(.result)
@@ -200,48 +181,6 @@ struct ProcessingView: View {
     }
     
     // MARK: - Logic
-    
-    // MARK: - AI Consent Check (Remote-configurable)
-    private func checkAIConsentAndStart() {
-        let hasConsented = UserDefaults.standard.bool(forKey: "has_accepted_ai_consent")
-        if hasConsented || isSimulation || appState.isSimulationMode {
-            startExperience()
-            return
-        }
-        
-        // Check remote config — if table doesn't exist, defaults to showing consent
-        Task {
-            let shouldShow = await fetchConsentFlag()
-            await MainActor.run {
-                if shouldShow {
-                    withAnimation { showAIConsent = true }
-                } else {
-                    startExperience()
-                }
-            }
-        }
-    }
-    
-    /// Fetch remote flag from Supabase app_config table
-    /// Defaults to true (show consent) if fetch fails — safe for Apple review
-    private func fetchConsentFlag() async -> Bool {
-        do {
-            let response = try await SupabaseService.shared.client
-                .from("app_config")
-                .select("value")
-                .eq("key", value: "show_ai_consent")
-                .single()
-                .execute()
-            
-            let json = try JSONSerialization.jsonObject(with: response.data) as? [String: Any]
-            if let value = json?["value"] as? String {
-                return value == "true"
-            }
-        } catch {
-            print("⚠️ Failed to fetch consent flag, defaulting to show: \(error)")
-        }
-        return true // Default: show consent (safe for review)
-    }
     
     private func startExperience() {
         // Start breathing animation

@@ -53,6 +53,7 @@ struct CameraView: View {
     @State private var selectedPhotoItem: PhotosPickerItem?
     @State private var pendingPhotoItem: PhotosPickerItem?
     @State private var showStyleSheet = false
+    @State private var showAIConsent = false
 
     
     // Camera Experience State
@@ -114,6 +115,22 @@ struct CameraView: View {
             if !showCapturedPreview {
                 controlsOverlay
             }
+            
+            // MARK: - AI Consent Overlay (full screen, above everything)
+            if showAIConsent {
+                AIConsentView(
+                    onAccept: {
+                        UserDefaults.standard.set(true, forKey: "has_accepted_ai_consent")
+                        withAnimation { showAIConsent = false }
+                    },
+                    onDecline: {
+                        withAnimation { showAIConsent = false }
+                        dismiss()
+                    }
+                )
+                .transition(.opacity)
+                .zIndex(100)
+            }
         }
         .sheet(isPresented: $showStyleSheet) {
             StylePickerSheet(selectedStyle: $appState.selectedHairstyle)
@@ -132,6 +149,7 @@ struct CameraView: View {
         }
 
         .onAppear {
+            checkAIConsent()
             TikTokService.shared.trackCameraOpened()
             Task {
                 await cameraService.checkAuthorization()
@@ -486,6 +504,42 @@ struct CameraView: View {
             appState.errorMessage = error.localizedDescription
             HapticManager.error()
         }
+    }
+    
+    // MARK: - AI Consent Check (Remote-configurable)
+    private func checkAIConsent() {
+        let hasConsented = UserDefaults.standard.bool(forKey: "has_accepted_ai_consent")
+        if hasConsented { return }
+        
+        Task {
+            let shouldShow = await fetchConsentFlag()
+            await MainActor.run {
+                if shouldShow {
+                    withAnimation { showAIConsent = true }
+                }
+            }
+        }
+    }
+    
+    /// Fetch remote flag from Supabase app_config table
+    /// Defaults to true (show consent) if fetch fails — safe for Apple review
+    private func fetchConsentFlag() async -> Bool {
+        do {
+            let response = try await SupabaseService.shared.client
+                .from("app_config")
+                .select("value")
+                .eq("key", value: "show_ai_consent")
+                .single()
+                .execute()
+            
+            let json = try JSONSerialization.jsonObject(with: response.data) as? [String: Any]
+            if let value = json?["value"] as? String {
+                return value == "true"
+            }
+        } catch {
+            print("⚠️ Failed to fetch consent flag, defaulting to show: \(error)")
+        }
+        return true // Default: show consent (safe for review)
     }
     
     // MARK: - Face State Simulation (replace with real face detection later)
