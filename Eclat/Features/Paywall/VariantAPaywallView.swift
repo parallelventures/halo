@@ -51,33 +51,35 @@ struct VariantAPaywallView: View {
                     // Top bar
                     topBar
                     
-                    // Hero Title
-                    VStack(spacing: 8) {
-                        Text("See yourself with a new look")
-                            .font(.custom("GTAlpinaTrial-CondensedThin", size: isIPad ? 44 : 34))
-                            .foregroundColor(.white)
-                            .multilineTextAlignment(.center)
-                            .lineLimit(2)
-                            .minimumScaleFactor(0.8)
-                            .fixedSize(horizontal: false, vertical: true)
-                        
-                        Text("Preview hairstyles with studio-grade realism")
-                            .font(.system(size: isIPad ? 17 : 15, weight: .medium))
-                            .foregroundColor(.white.opacity(0.5))
-                            .multilineTextAlignment(.center)
+                    ScrollView(.vertical, showsIndicators: false) {
+                        VStack(spacing: 0) {
+                            // Hero Title
+                            VStack(spacing: 8) {
+                                Text("See yourself with a new look")
+                                    .font(.custom("GTAlpinaTrial-CondensedThin", size: isIPad ? 44 : 34))
+                                    .foregroundColor(.white)
+                                    .multilineTextAlignment(.center)
+                                    .lineLimit(2)
+                                    .minimumScaleFactor(0.8)
+                                    .fixedSize(horizontal: false, vertical: true)
+                                
+                                Text("Preview hairstyles with studio-grade realism")
+                                    .font(.system(size: isIPad ? 17 : 15, weight: .medium))
+                                    .foregroundColor(.white.opacity(0.5))
+                                    .multilineTextAlignment(.center)
+                            }
+                            .padding(.horizontal, 24)
+                            .padding(.top, 12)
+                            
+                            // Fanned Style Cards
+                            styleStackVisual
+                                .padding(.vertical, isIPad ? 16 : 10)
+                            
+                            // Pricing Section
+                            pricingSection
+                                .padding(.bottom, geometry.safeAreaInsets.bottom + 16)
+                        }
                     }
-                    .padding(.horizontal, 24)
-                    .padding(.top, 12)
-                    
-                    // Fanned Style Cards - takes available space
-                    styleStackVisual
-                        .padding(.vertical, isIPad ? 20 : 10)
-                    
-                    Spacer()
-                    
-                    // Pricing Section - FIXED at bottom
-                    pricingSection
-                        .padding(.bottom, geometry.safeAreaInsets.bottom + 16)
                 }
             }
         }
@@ -175,7 +177,7 @@ struct VariantAPaywallView: View {
                 }
             }
         }
-        .frame(height: 350)
+        .frame(height: isIPad ? 280 : 350)
     }
     
     // MARK: - Pricing Section
